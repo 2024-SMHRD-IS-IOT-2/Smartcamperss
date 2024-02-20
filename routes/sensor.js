@@ -1,13 +1,22 @@
-/* 메인페이지 구현 */
+// 센서값 받아오는 라우트
 const express = require('express');
-const router = express.Router();
-const path = require('path');
+const http = require('http');
+const socketIo = require('socket.io');
 
+const app = express();
+const server = http.createServer(app);
+const io = socketIo(server);
 
-// 메인페이지 라우터
-// - react-project 내 build폴더 -> index.html 파일 경로 설정
-router.get('/main', (req, res)=>{
-    res.sendFile(path.join(__dirname, '..', 'react-project', 'build', 'index.html'))
+io.on('connection', (socket) => {
+  console.log('Client connected');
+
+  socket.on('sensorData', (data)=>{
+    console.log(data);
+  })
+
+  socket.on('disconnect', () => {
+    console.log('Client disconnected');
+  });
 });
 
-module.exports = router ; 
+module.exports = express.Router();
