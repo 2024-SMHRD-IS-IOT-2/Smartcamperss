@@ -1,22 +1,26 @@
-// 센서값 받아오는 라우트
+/* "센서값" 파일입니다.
+- server.js에서 센서값 받습니다.
+- 여러 컴포넌트(react)와 통신해 센서값 줍니다.
+ */
 const express = require('express');
-const http = require('http');
-const socketIo = require('socket.io');
+const sensorRouter = express.Router();
 
-const app = express();
-const server = http.createServer(app);
-const io = socketIo(server);
+let sensorData;
 
-io.on('connection', (socket) => {
-  console.log('Client connected');
+// server.js에서 센서값 받아와서 처리하는 함수
+function receiveSensorData (data){
+  sensorData=data;
+  console.log('hihi', sensorData);
+}
 
-  socket.on('sensorData', (data)=>{
-    console.log(data);
-  })
+// 클라이언트가 http://localhost:8000/sensor/data로 요청을 보냈을 때 작동하는 함수
+sensorRouter.post('/data', (req,res)=>{
+  console.log(req.body);
+  res.json({sensorData:sensorData});
+})
 
-  socket.on('disconnect', () => {
-    console.log('Client disconnected');
-  });
-});
-
-module.exports = express.Router();
+// module.exports 여러개 하는 법!!
+module.exports = {
+  receiveSensorData,
+  sensorRouter    
+}

@@ -2,4 +2,6 @@
 const express = require('express');
 const router = express.Router();
 
+// DB에 회원정보 저장
+
 module.exports = router;

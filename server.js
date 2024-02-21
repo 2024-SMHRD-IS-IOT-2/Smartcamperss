@@ -6,9 +6,11 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
 
-const indexRouter = require('./routes')
+// module 여러개 받는 방법
+const indexRouter = require('./routes/index');
 const userRouter = require('./routes/user');
-const sensorRouter = require('./routes/sensor');
+const {receiveSensorData, sensorRouter} = require('./routes/sensor');
+
 
 app.set('port', process.env.PORT || 8000);
 
@@ -36,6 +38,11 @@ app.use('/', indexRouter);
 app.use('/user', userRouter);
 app.use('/sensor', sensorRouter);
 
+// let temperature = 0;
+// let humidity = 0;
+// let fire = 0;
+// let battery = 0;
+let sensorData;
 
 /************** sensor값 받아오기 *************/
 io.on('connection', (socket) => {
@@ -44,8 +51,18 @@ io.on('connection', (socket) => {
   socket.on('sensorData', (data)=>{
     console.log(data);
     // 여기에서 받아온 값을 변수에 넣어서 여기저기 보내주자!!
-  })
+    // 각자 보낼지, 묶어서 보낼지 고민중...(어차피 다 띄울거니깐 묶어서 보내자!)
+    // temperature = data.temperature;
+    // humidity = data.humidity;
+    // fire = data.fire;4
+    // battery = data.battery;
 
+    sensorData = data
+    receiveSensorData(sensorData) // index.js에 있는 함수
+    
+    // module.exports = sensorData;
+  })
+  
   socket.on('disconnect', () => {
     console.log('Client disconnected');
   });
@@ -53,12 +70,13 @@ io.on('connection', (socket) => {
 
 
 // app.listen(app.get('port'), ()=>{
-//   console.log(`Server is listening on port${app.get('port')}`);
-// })
-
-
-
-server.listen(app.get('port'), () => {
-  console.log(`Server running on port 3000 ${app.get('port')}`);
-  console.log('server is fine')
-});
+  //   console.log(`Server is listening on port${app.get('port')}`);
+  // })
+  
+  
+  
+  server.listen(app.get('port'), () => {
+    console.log(`Server running on port ${app.get('port')}`);
+    console.log('server is fine')
+  });
+  
