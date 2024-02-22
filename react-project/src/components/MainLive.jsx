@@ -3,10 +3,22 @@
 ==> 위험 감지 시, alert창 띄우기(이건 모든 곳에서 띄워야 하므로 Body에서 처리하면 되나??)
 ==> 
 */
-import axios from '../axios'
-import React, { useEffect, useState } from 'react'
+import axios from '../axios';
+import React, { useEffect, useState } from 'react';
+import '../App.css';
 
 const MainLive = () => {
+  const style={
+    tableStyle:{
+      border:"1px solid black"
+    },
+    backgroundColorRed:{
+      backgroundColor:"red"
+    },
+    backgroundColorGreen:{
+      backgroundColor:"green"
+    }
+  }
   
   const [tempData, setTempData] = useState(null);
   const [humidityData, setHumidityData] = useState(null);
@@ -24,6 +36,7 @@ const MainLive = () => {
       axios
     .post('/sensor/data', {id:'hi'})
     .then((res)=>{
+
         setTempData(res.data.sensorData.temperature);
         setHumidityData(res.data.sensorData.humidity);
         setBatteryData(res.data.sensorData.battery);
@@ -38,26 +51,80 @@ const MainLive = () => {
     }, 1000)
   },[tempData,humidityData,batteryData,fire1Data,fire2Data,fire3Data,fire4Data,airData,coData])
 
-  // const showData = ()=>{
-  //   axios
-  //   .post('/sensor/data', {id:'hi'})
-  //   .then((res)=>{
-  //       console.log(res.data.sensorData.temperature);
-  //   })
-  // }
+
   return (
     <div>
-        {/* <button onClick={showData}>sensorBtn</button> */}
-        <p>온도</p>
-        <p>temp : {tempData}</p>
-        <p>hum : {humidityData}</p>
-        <p>battery : {batteryData}</p>
-        <p>f1 : {fire1Data}</p>
-        <p>f2 : {fire2Data}</p>
-        <p>f3 : {fire3Data}</p>
-        <p>f4 : {fire4Data}</p>
-        <p>air : {airData}</p>
-        <p>co : {coData}</p>
+      {/* 7행 6열 테이블 */}
+      <div>
+          <table className='table'>
+            {/* 제목 행 */}
+            <tr>
+              <th className='table'></th>
+              <th className='table'>일산화탄소</th>
+              <th className='table'>온 도</th>
+              <th className='table'>습 도</th>
+              <th className='table'>공기 질</th>
+              <th className='table'>배터리</th>
+            </tr>
+            <tr>
+              <td className='table'>데크1</td>
+              <td className='table'>{coData}</td>
+                {tempData>23
+                ? <td style={style.backgroundColorRed}>{tempData}</td>
+                : <td style={style.backgroundColorGreen}>{tempData}</td>
+                }
+              <td className='table'>{humidityData}</td>
+              <td className='table'>{airData}</td>
+              <td className='table'>{batteryData}</td>
+            </tr>
+            <tr>
+              <td className='table'>데크2</td>
+              <td className='table'></td>
+              <td className='table'></td>
+              <td className='table'></td>
+              <td className='table'></td>
+              <td className='table'></td>
+            </tr>
+            <tr>
+              <td className='table'>데크3</td>
+              <td className='table'></td>
+              <td className='table'></td>
+              <td className='table'></td>
+              <td className='table'></td>
+              <td className='table'></td>
+            </tr>
+            <tr>
+              <td className='table'>데크4</td>
+              <td className='table'></td>
+              <td className='table'></td>
+              <td className='table'></td>
+              <td className='table'></td>
+              <td className='table'></td>
+            </tr>
+            <tr>
+              <td className='table'>데크5</td>
+              <td className='table'></td>
+              <td className='table'></td>
+              <td className='table'></td>
+              <td className='table'></td>
+              <td className='table'></td>
+            </tr>
+            <tr>
+              <td className='table'>데크6</td>
+              <td className='table'></td>
+              <td className='table'></td>
+              <td className='table'></td>
+              <td className='table'></td>
+              <td className='table'></td>
+            </tr>
+          </table>
+        </div>
+
+
+        {/* 날씨API 띄우기 */}
+        <div>
+
+        </div>
     </div>
   )
 }
