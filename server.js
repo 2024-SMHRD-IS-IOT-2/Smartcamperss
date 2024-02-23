@@ -42,9 +42,10 @@ app.use('/sensor', sensorRouter);
 // let humidity = 0;
 // let fire = 0;
 // let battery = 0;
-let sensorData;
 
 /************** sensor값 받아오기 *************/
+let sensorData;
+
 io.on('connection', (socket) => {
   console.log('Client connected');
 

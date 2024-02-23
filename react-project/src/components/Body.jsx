@@ -7,7 +7,10 @@ import MainLive from './MainLive'
 const Body = () => {
   return (
     <div>
-        <MainLive/>
+        <Header/>
+
+        {/* Routes안에 Route들로 나머지 Login,Signup,DB관리페이지, 알림페이지 ... */}
+          <MainLive/>
     </div>
   )
 }

@@ -20,6 +20,8 @@ const MainLive = () => {
     }
   }
   
+  // state -> Ref로 바꾸기
+  // Object로 바꾸기
   const [tempData, setTempData] = useState(null);
   const [humidityData, setHumidityData] = useState(null);
   const [batteryData, setBatteryData] = useState(null);
@@ -36,7 +38,6 @@ const MainLive = () => {
       axios
     .post('/sensor/data', {id:'hi'})
     .then((res)=>{
-
         setTempData(res.data.sensorData.temperature);
         setHumidityData(res.data.sensorData.humidity);
         setBatteryData(res.data.sensorData.battery);
