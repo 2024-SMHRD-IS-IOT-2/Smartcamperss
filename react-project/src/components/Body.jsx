@@ -3,6 +3,7 @@
 */
 import React from 'react'
 import MainLive from './MainLive'
+import Header from './Header'
 
 const Body = () => {
   return (
