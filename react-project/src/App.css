@@ -1,3 +1,22 @@
+/* Body.jsx */
+
+/* Header.jsx */
+
+/* Login.jsx */
+
+/* MainLive.jsx */
 .table{
   border: 1px solid black;
 }
+
+.stableGreen{
+  background-color: green;
+}
+.warningOrange{
+  background-color: orange;
+}
+.warningRed{
+  background-color: red;
+}
+
+/* Signup.jsx */
