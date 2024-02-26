@@ -19,4 +19,16 @@
   background-color: red;
 }
 
+.totalClimate{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.climateinfo{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
 /* Signup.jsx */

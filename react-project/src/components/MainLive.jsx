@@ -180,16 +180,21 @@ const MainLive = () => {
         </div>
 
         {/* 날씨API 띄우기 */}
-        <div>
+        <div className="totalClimate">
           <p>{today.toLocaleString()}</p>
+          <div className="climateinfo">
           <img
             src={`https://openweathermap.org/img/wn/${weather?.weather[0].icon}@2x.png`}
             alt=""
+            style={{width:'150px', height:'150px', marginRight:'50px'}}
           />
-          <p>위치 : {weather?.name}</p>
-          <p>현재 날씨 : {weather?.weather[0].main}</p>
-          <p>기온 : {weather?.main.temp}</p>
-          <p>풍속 : {weather?.wind.speed}</p>
+          <div>
+            <p>위치 : {weather?.name}</p>
+            <p>현재 날씨 : {weather?.weather[0].main}</p>
+            <p>기온 : {weather?.main.temp}</p>
+            <p>풍속 : {weather?.wind.speed}</p>
+          </div>
+          </div>
           {/* <button onClick={handleShowForecast}>일기예보</button> */}
           {modalShow
           ? (
