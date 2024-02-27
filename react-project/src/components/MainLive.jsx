@@ -4,15 +4,17 @@
 ==> 
 */
 
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import axios from "../axios";
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import "../App.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { ClimateContext } from "../context/ClimateContext";
+import { useNavigate } from "react-router-dom";
 
 const MainLive = () => {
+  const navigate = useNavigate();
   // 센서값 (Ref로 바꾸기 / Object로 바꾸기)
   let sensorData = useRef({})
   // 위도, 경도
@@ -31,26 +33,47 @@ const MainLive = () => {
   // 오늘날씨 API
   const {weather, setWeather} = useContext(ClimateContext); // state에서 context로 바꿔서 App.js로 올림 => LCD에서도 쓰려고
   // const [weather, setWeather] = useState(null);
-  const [forecast5days, setForecast5days] = useState(null);
+  // const [forecast5days, setForecast5days] = useState(null);
 
+  // LCD로 센서값(sensorData) 보내는 함수
+  const goToLCDPage_1 = ()=>{
+    navigate(`/lcd/1`)
+  }
+  const goToLCDPage_2 = ()=>{
+    navigate(`/lcd/2`)
+  }
+  const goToLCDPage_3 = ()=>{
+    navigate(`/lcd/3`)
+  }
+  const goToLCDPage_4 = ()=>{
+    navigate(`/lcd/4`)
+  }
+  const goToLCDPage_5 = ()=>{
+    navigate(`/lcd/5`)
+  }
+  const goToLCDPage_6 = ()=>{
+    navigate(`/lcd/6`)
+  }
   
   useEffect(() => {
     // setInterval 꼭 써야하나? useEffect때문에 ref가 바뀌면 당연히 axios 다시 실행될텐데
-    setInterval(() => {
-      axios.post("/sensor/data", { id: "hi" }).then((res) => {
-        sensorData.current = {
-          temperature:res.data.sensorData.temperature,
-          humidity:res.data.sensorData.humidity,
-          battery:res.data.sensorData.battery,
-          fire1:res.data.sensorData.fire_1,
-          fire2:res.data.sensorData.fire_2,
-          fire3:res.data.sensorData.fire_3,
-          fire4:res.data.sensorData.fire_4,
-          air:res.data.sensorData.Air,
-          co:res.data.sensorData.Co
-          }
-      });
-    }, 1000);
+      setInterval(() => {
+        axios.post("/sensor/data", { id: "hi" }).then((res) => {
+          sensorData.current = {
+            camp_id:res.data.sensorData.camp_id,
+            deck_id:res.data.sensorData.deck_id,
+            temperature:res.data.sensorData.temperature,
+            humidity:res.data.sensorData.humidity,
+            battery:res.data.sensorData.battery,
+            fire1:res.data.sensorData.fire_1,
+            fire2:res.data.sensorData.fire_2,
+            fire3:res.data.sensorData.fire_3,
+            fire4:res.data.sensorData.fire_4,
+            air:res.data.sensorData.Air,
+            co:res.data.sensorData.Co
+            }
+        });
+      }, 1000);
   }, [sensorData]);
 
   // 위치정보(경도, 위도) 받아오기 => getCurrentWeather() 실행
@@ -73,28 +96,32 @@ const MainLive = () => {
   };
   
   // 5일간 일기예보(response.data) 받아오기
-  const getForecast5days = async () => {
-    try {
-        const API_KEY = process.env.REACT_APP_FORECAST_KEY;
-        let weather_url = `https://apis.data.go.kr/1360000/MidFcstInfoService/getMidFcst?serviceKey=${API_KEY}&numOfRows=10&dataType=JSON&stnId=156&pageNo=1&regId=11F20000&tmFc=202402291800`;
+//   const getForecast5days = async () => {
+//     try {
+//         const API_KEY = process.env.REACT_APP_FORECAST_KEY;
+//         let weather_url = `https://apis.data.go.kr/1360000/MidFcstInfoService/getMidFcst?serviceKey=${API_KEY}&numOfRows=10&dataType=JSON&stnId=156&pageNo=1&regId=11F20000&tmFc=202402291800`;
 
-        let response = await axios.get(weather_url);
-        setForecast5days(response.data);
-        console.log("기상예보 :", forecast5days);
-    } catch (error) {
-        console.error('5일 예보 데이터 가져오기 실패:', error.message);
-    }
-};
+//         let response = await axios.get(weather_url);
+//         setForecast5days(response.data);
+//         console.log("기상예보 :", forecast5days);
+//     } catch (error) {
+//         console.error('5일 예보 데이터 가져오기 실패:', error.message);
+//     }
+// };
   // mounting 될 때, 날씨 띄우기
   useEffect(() => {
     // eslint-disable-next-line
     getCurrentLocation();
-  }); 
+  },[]); 
 
-  useEffect(()=>{
-    // eslint-disable-next-line
-    getForecast5days();
-  },[])
+  setInterval(() => {
+    getCurrentLocation();
+  }, 1000);
+
+  // useEffect(()=>{
+  //   // eslint-disable-next-line
+  //   getForecast5days();
+  // },[])
   
 
   return (
@@ -115,7 +142,7 @@ const MainLive = () => {
               <th style={{border:'1px solid black'}}>배터리</th>
             </tr>
             <tr style={{border:'1px solid black'}}>
-              <td style={{border:'1px solid black'}}>데크1</td>
+              <td style={{border:'1px solid black'}}>데크 {sensorData.current.deck_id}</td>
               <td style={{border:'1px solid black'}}>{sensorData.current.co}</td>
               {sensorData.current.temperature > 21 
               ? (<td className="warningRed" style={{border:'1px solid black'}}>{sensorData.current.temperature}</td>) 
@@ -214,6 +241,12 @@ const MainLive = () => {
           </Button>
           )
           }
+          <button onClick={goToLCDPage_1}>Deck_1</button>
+          <button onClick={goToLCDPage_2}>Deck_2</button>
+          <button onClick={goToLCDPage_3}>Deck_3</button>
+          <button onClick={goToLCDPage_4}>Deck_4</button>
+          <button onClick={goToLCDPage_5}>Deck_5</button>
+          <button onClick={goToLCDPage_6}>Deck_6</button>
 
           <Modal
             show={modalShow}
@@ -258,6 +291,7 @@ const MainLive = () => {
               <Button onClick={() => setModalShow(false)}>Close</Button>
             </Modal.Footer>
           </Modal>
+
         </div>
       </div>
     </div>

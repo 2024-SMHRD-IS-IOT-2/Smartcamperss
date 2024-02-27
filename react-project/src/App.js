@@ -2,7 +2,6 @@ import { useState } from 'react';
 import './App.css';
 import Body from './components/Body'
 import { ClimateContext } from './context/ClimateContext';
-import Login from './components/Login';
 
 function App() {
   const [weather, setWeather] = useState(null);

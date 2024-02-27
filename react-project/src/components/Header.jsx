@@ -18,7 +18,6 @@ const Header = () => {
       margin:'20px 10px 10px'
     }
   }
-  const [checked, setChecked] = useState(false);
   const [radioValue, setRadioValue] = useState('1');
 
   const radios = [
@@ -26,7 +25,6 @@ const Header = () => {
     { name: 'DB 관리 페이지', value: '2', to:'/dbmanage' },
     { name: '알림 페이지', value: '3', to:'/notice' },
     { name: '로그 아웃', value: '4', to:'/login' },
-    { name: 'LCD', value: '5', to:'/lcd' }
   ];
 
   return (

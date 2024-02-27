@@ -24,7 +24,7 @@ const Body = () => {
           <Route path='/signup' element={<Signup/>}/>
           <Route path='/' element={<MainLive/>}/>
           <Route path='/notice' element={<Notice/>}/>
-          <Route path='/lcd' element={<LcdLayout/>}/>
+          <Route path='/lcd/:decknum' element={<LcdLayout/>}/>
         </Routes>
           
     </div>
