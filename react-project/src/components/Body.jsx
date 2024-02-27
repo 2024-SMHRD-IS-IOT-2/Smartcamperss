@@ -4,7 +4,7 @@
 import React from 'react'
 import "../App.css";
 import Login from './Login'
-import Signup from './Signup'
+import Signup from './Join'
 import MainLive from './MainLive'
 import Header from './Header'
 import Notice from './Notice'
@@ -21,7 +21,7 @@ const Body = () => {
         {/* Routes안에 Route들로 나머지 Login,Signup,DB관리페이지, 알림페이지 ... */}
         <Routes>
           <Route path='/login' element={<Login/>}/>
-          <Route path='/signup' element={<Signup/>}/>
+          <Route path='/join' element={<Join/>}/>
           <Route path='/' element={<MainLive/>}/>
           <Route path='/notice' element={<Notice/>}/>
           <Route path='/lcd/:decknum' element={<LcdLayout/>}/>
