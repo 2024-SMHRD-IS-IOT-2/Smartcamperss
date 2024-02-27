@@ -14,6 +14,10 @@ import { ClimateContext } from "../context/ClimateContext";
 import { useNavigate } from "react-router-dom";
 
 const MainLive = () => {
+
+  const user = JSON.parse(sessionStorage.getItem('user'));//세션
+
+
   const navigate = useNavigate();
   // 센서값 (Ref로 바꾸기 / Object로 바꾸기)
   let sensorData = useRef({})

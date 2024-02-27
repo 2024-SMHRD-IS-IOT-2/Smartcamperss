@@ -1,6 +1,7 @@
 import React from 'react'
 
 const Notice = () => {
+  const user = JSON.parse(sessionStorage.getItem('user'));
   return (
     <div>
       <form action="#" method='get'>
