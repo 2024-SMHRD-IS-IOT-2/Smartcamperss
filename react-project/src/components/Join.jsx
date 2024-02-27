@@ -105,7 +105,7 @@ const Join = () => {
                         console.log('요청성공', res.data);
 
                         window.alert('회원가입 완료!');
-                        navigate('/login');
+                        navigate('/');
 
                     });
             }

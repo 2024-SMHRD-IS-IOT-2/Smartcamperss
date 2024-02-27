@@ -1,7 +1,7 @@
 import React, { useRef } from 'react'
 import {Form, Button} from 'react-bootstrap';
 import axios from "axios";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 
 
 const Login = () => {
@@ -17,7 +17,7 @@ const Login = () => {
     e.preventDefault();
 
     axios
-        .post('/user/login', {id: idRef.current.value, pw: pwRef.current.value})
+        .post('/user/', {id: idRef.current.value, pw: pwRef.current.value})
         .then((res)=>{
           // 로그인 성공 : success | 로그인 실패 : fail
           if(res.data.result === 'success'){
@@ -29,7 +29,7 @@ const Login = () => {
             navigate('/mainlive');
           }else{
             alert('아이디 혹은 비밀번호를 확인해주세요.');
-            navigate('/login');
+            navigate('/');
           }
         });
   }
@@ -55,8 +55,8 @@ const Login = () => {
           </Button>
         </div>
       </Form>
-  {/* 회원가입 링크 추가 */}
-  <p>계정이 없으신가요? <Link to="/signin">회원가입</Link></p>
+       {/* 회원가입 링크 추가 */}
+        <p>계정이 없으신가요? <Link to="/join"s>회원가입</Link></p>
     </div>
   )
 }

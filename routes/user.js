@@ -54,7 +54,7 @@ router.post('/join',(req,res)=>{
 
 
 // **로그인 라우터
-router.post('/login', (req,res)=>{
+router.post('/', (req,res)=>{
     console.log('로그인 요청..', req.body);
 
     // DB연동코드 추가

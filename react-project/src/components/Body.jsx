@@ -4,12 +4,12 @@
 import React from 'react'
 import "../App.css";
 import Login from './Login'
-import Signup from './Join'
 import MainLive from './MainLive'
 import Header from './Header'
 import Notice from './Notice'
 import { Route, Routes } from 'react-router-dom';
 import LcdLayout from './LcdLayout'
+import Join from './Join';
 
 
 const Body = () => {
@@ -20,9 +20,9 @@ const Body = () => {
 
         {/* Routes안에 Route들로 나머지 Login,Signup,DB관리페이지, 알림페이지 ... */}
         <Routes>
-          <Route path='/login' element={<Login/>}/>
+          <Route path='/' element={<Login/>}/>
           <Route path='/join' element={<Join/>}/>
-          <Route path='/' element={<MainLive/>}/>
+          <Route path='/mainlive' element={<MainLive/>}/>
           <Route path='/notice' element={<Notice/>}/>
           <Route path='/lcd/:decknum' element={<LcdLayout/>}/>
         </Routes>
