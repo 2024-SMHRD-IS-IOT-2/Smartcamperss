@@ -1,12 +1,16 @@
+import { useState } from 'react';
 import './App.css';
 import Body from './components/Body'
-//멋찐희재 (푸시할떄 지우세요)
+import { ClimateContext } from './context/ClimateContext';
+import Login from './components/Login';
 
 function App() {
+  const [weather, setWeather] = useState(null);
+
   return (
-    <div className="App"> 
+    <ClimateContext.Provider className="App" value={{weather, setWeather}}>
       <Body/>
-    </div>
+    </ClimateContext.Provider>
   );
 }
 

@@ -4,12 +4,13 @@
 ==> 
 */
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import axios from "../axios";
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import "../App.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { ClimateContext } from "../context/ClimateContext";
 
 const MainLive = () => {
   // 센서값 (Ref로 바꾸기 / Object로 바꾸기)
@@ -28,7 +29,8 @@ const MainLive = () => {
   const [modalShow, setModalShow] = React.useState(false);
   
   // 오늘날씨 API
-  const [weather, setWeather] = useState(null);
+  const {weather, setWeather} = useContext(ClimateContext); // state에서 context로 바꿔서 App.js로 올림 => LCD에서도 쓰려고
+  // const [weather, setWeather] = useState(null);
   const [forecast5days, setForecast5days] = useState(null);
 
   
@@ -85,10 +87,12 @@ const MainLive = () => {
 };
   // mounting 될 때, 날씨 띄우기
   useEffect(() => {
+    // eslint-disable-next-line
     getCurrentLocation();
   }); 
 
   useEffect(()=>{
+    // eslint-disable-next-line
     getForecast5days();
   },[])
   
@@ -100,94 +104,96 @@ const MainLive = () => {
         {/* 센서값 데이터 테이블 */}
         <div>
           {/* 7행 6열 테이블 */}
-          <table className="table">
+          <table className="table" style={{border:'3px solid black'}}>
             {/* 제목 행 */}
-            <tr>
-              <th></th>
-              <th>일산화탄소</th>
-              <th>온 도</th>
-              <th>습 도</th>
-              <th>공기질</th>
-              <th>배터리</th>
+            <tr style={{border:'1px solid black'}}>
+              <th style={{border:'1px solid black'}}></th>
+              <th style={{border:'1px solid black'}}>일산화탄소</th>
+              <th style={{border:'1px solid black'}}>온 도</th>
+              <th style={{border:'1px solid black'}}>습 도</th>
+              <th style={{border:'1px solid black'}}>공기질</th>
+              <th style={{border:'1px solid black'}}>배터리</th>
             </tr>
-            <tr>
-              <td>데크1</td>
-              <td>{sensorData.current.co}</td>
+            <tr style={{border:'1px solid black'}}>
+              <td style={{border:'1px solid black'}}>데크1</td>
+              <td style={{border:'1px solid black'}}>{sensorData.current.co}</td>
               {sensorData.current.temperature > 21 
-              ? (<td className="warningRed">{sensorData.current.temperature}</td>) 
-              : (<td className="stableGreen">{sensorData.current.temperature}</td>)
+              ? (<td className="warningRed" style={{border:'1px solid black'}}>{sensorData.current.temperature}</td>) 
+              : (<td className="stableGreen" style={{border:'1px solid black'}}>{sensorData.current.temperature}</td>)
               }
-              <td>{sensorData.current.humidity}</td>
-              <td>{sensorData.current.air}</td>
-              <td>{sensorData.current.battery}</td>
+              <td style={{border:'1px solid black'}}>{sensorData.current.humidity}</td>
+              <td style={{border:'1px solid black'}}>{sensorData.current.air}</td>
+              <td style={{border:'1px solid black'}}>{sensorData.current.battery}</td>
             </tr>
-            <tr>
-              <td>데크2</td>
-              <td>{sensorData.current.co}</td>
+            <tr style={{border:'1px solid black'}}>
+              <td style={{border:'1px solid black'}}>데크2</td>
+              <td style={{border:'1px solid black'}}>{sensorData.current.co}</td>
               {sensorData.current.temperature > 21 
-              ? (<td className="warningRed">{sensorData.current.temperature}</td>) 
-              : (<td className="stableGreen">{sensorData.current.temperature}</td>)
+              ? (<td className="warningRed" style={{border:'1px solid black'}}>{sensorData.current.temperature}</td>) 
+              : (<td className="stableGreen" style={{border:'1px solid black'}}>{sensorData.current.temperature}</td>)
               }
-              <td>{sensorData.current.humidity}</td>
-              <td>{sensorData.current.air}</td>
-              <td>{sensorData.current.battery}</td>
+              <td style={{border:'1px solid black'}}>{sensorData.current.humidity}</td>
+              <td style={{border:'1px solid black'}}>{sensorData.current.air}</td>
+              <td style={{border:'1px solid black'}}>{sensorData.current.battery}</td>
             </tr>
-            <tr>
-              <td>데크3</td>
-              <td>{sensorData.current.co}</td>
+            <tr style={{border:'1px solid black'}}>
+              <td style={{border:'1px solid black'}}>데크3</td>
+              <td style={{border:'1px solid black'}}>{sensorData.current.co}</td>
               {sensorData.current.temperature > 21 
-              ? (<td className="warningRed">{sensorData.current.temperature}</td>) 
-              : (<td className="stableGreen">{sensorData.current.temperature}</td>)
+              ? (<td className="warningRed" style={{border:'1px solid black'}}>{sensorData.current.temperature}</td>) 
+              : (<td className="stableGreen" style={{border:'1px solid black'}}>{sensorData.current.temperature}</td>)
               }
-              <td>{sensorData.current.humidity}</td>
-              <td>{sensorData.current.air}</td>
-              <td>{sensorData.current.battery}</td>
+              <td style={{border:'1px solid black'}}>{sensorData.current.humidity}</td>
+              <td style={{border:'1px solid black'}}>{sensorData.current.air}</td>
+              <td style={{border:'1px solid black'}}>{sensorData.current.battery}</td>
             </tr>
-            <tr>
-              <td>데크4</td>
-              <td>{sensorData.current.co}</td>
+            <tr style={{border:'1px solid black'}}>
+              <td style={{border:'1px solid black'}}>데크4</td>
+              <td style={{border:'1px solid black'}}>{sensorData.current.co}</td>
               {sensorData.current.temperature > 21 
-              ? (<td className="warningRed">{sensorData.current.temperature}</td>) 
-              : (<td className="stableGreen">{sensorData.current.temperature}</td>)
+              ? (<td className="warningRed" style={{border:'1px solid black'}}>{sensorData.current.temperature}</td>) 
+              : (<td className="stableGreen" style={{border:'1px solid black'}}>{sensorData.current.temperature}</td>)
               }
-              <td>{sensorData.current.humidity}</td>
-              <td>{sensorData.current.air}</td>
-              <td>{sensorData.current.battery}</td>
+              <td style={{border:'1px solid black'}}>{sensorData.current.humidity}</td>
+              <td style={{border:'1px solid black'}}>{sensorData.current.air}</td>
+              <td style={{border:'1px solid black'}}>{sensorData.current.battery}</td>
             </tr>
-            <tr>
-              <td>데크5</td>
-              <td>{sensorData.current.co}</td>
+            <tr style={{border:'1px solid black'}}>
+              <td style={{border:'1px solid black'}}>데크5</td>
+              <td style={{border:'1px solid black'}}>{sensorData.current.co}</td>
               {sensorData.current.temperature > 21 
-              ? (<td className="warningRed">{sensorData.current.temperature}</td>) 
-              : (<td className="stableGreen">{sensorData.current.temperature}</td>)
+              ? (<td className="warningRed" style={{border:'1px solid black'}}>{sensorData.current.temperature}</td>) 
+              : (<td className="stableGreen" style={{border:'1px solid black'}}>{sensorData.current.temperature}</td>)
               }
-              <td>{sensorData.current.humidity}</td>
-              <td>{sensorData.current.air}</td>
-              <td>{sensorData.current.battery}</td>
+              <td style={{border:'1px solid black'}}>{sensorData.current.humidity}</td>
+              <td style={{border:'1px solid black'}}>{sensorData.current.air}</td>
+              <td style={{border:'1px solid black'}}>{sensorData.current.battery}</td>
             </tr>
-            <tr>
-              <td>데크6</td>
-              <td>{sensorData.current.co}</td>
+            <tr style={{border:'1px solid black'}}>
+              <td style={{border:'1px solid black'}}>데크6</td>
+              <td style={{border:'1px solid black'}}>{sensorData.current.co}</td>
               {sensorData.current.temperature > 21 
-              ? (<td className="warningRed">{sensorData.current.temperature}</td>) 
-              : (<td className="stableGreen">{sensorData.current.temperature}</td>)
+              ? (<td className="warningRed" style={{border:'1px solid black'}}>{sensorData.current.temperature}</td>) 
+              : (<td className="stableGreen" style={{border:'1px solid black'}}>{sensorData.current.temperature}</td>)
               }
-              <td>{sensorData.current.humidity}</td>
-              <td>{sensorData.current.air}</td>
-              <td>{sensorData.current.battery}</td>
+              <td style={{border:'1px solid black'}}>{sensorData.current.humidity}</td>
+              <td style={{border:'1px solid black'}}>{sensorData.current.air}</td>
+              <td style={{border:'1px solid black'}}>{sensorData.current.battery}</td>
             </tr>
           </table>
         </div>
 
         {/* 날씨API 띄우기 */}
-        <div className="totalClimate">
+        <div className="totalClimate" style={{color:'black', fontWeight:'900'}}>
           <p>{today.toLocaleString()}</p>
           <div className="climateinfo">
+          <div style={{backgroundColor:'lightblue', marginRight:'20px', borderRadius:"50%", width:'150px', height:'150px'}}>
           <img
             src={`https://openweathermap.org/img/wn/${weather?.weather[0].icon}@2x.png`}
             alt=""
             style={{width:'150px', height:'150px', marginRight:'50px'}}
           />
+          </div>
           <div>
             <p>위치 : {weather?.name}</p>
             <p>현재 날씨 : {weather?.weather[0].main}</p>
@@ -220,7 +226,7 @@ const MainLive = () => {
                 일기 예보
               </Modal.Title>
             </Modal.Header>
-            <Modal.Body>
+            <Modal.Body className="table">
               <table>
                 <tr>
                   <th></th>
