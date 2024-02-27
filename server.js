@@ -44,21 +44,18 @@ app.use('/sensor', sensorRouter);
 // let battery = 0;
 
 /************** sensor값 받아오기 *************/
-let sensorData;
+let sensorData = {};
 
 io.on('connection', (socket) => {
   console.log('Client connected');
 
   socket.on('sensorData', (data)=>{
-    console.log(data);
     // 여기에서 받아온 값을 변수에 넣어서 여기저기 보내주자!!
     // 각자 보낼지, 묶어서 보낼지 고민중...(어차피 다 띄울거니깐 묶어서 보내자!)
-    // temperature = data.temperature;
-    // humidity = data.humidity;
-    // fire = data.fire;4
-    // battery = data.battery;
+    
+    sensorData[data.id] = data
+    // console.log('나롱이 ==>', sensorData);
 
-    sensorData = data
     receiveSensorData(sensorData) // index.js에 있는 함수
     
     // module.exports = sensorData;
