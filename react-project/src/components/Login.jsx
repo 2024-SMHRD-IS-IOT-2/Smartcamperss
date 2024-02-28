@@ -1,7 +1,7 @@
 import React, { useRef } from 'react'
 import {Form, Button} from 'react-bootstrap';
 import axios from "axios";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 
 
 const Login = () => {
@@ -56,7 +56,7 @@ const Login = () => {
         </div>
       </Form>
   {/* 회원가입 링크 추가 */}
-  <p>계정이 없으신가요? <Link to="/signin">회원가입</Link></p>
+  <p>계정이 없으신가요? <Link to="/join">회원가입</Link></p>
     </div>
   )
 }

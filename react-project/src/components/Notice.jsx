@@ -3,7 +3,7 @@ import React from 'react'
 const Notice = () => {
   return (
     <div>
-      <form action="#" method='get'>
+      <form action="/lcd" method='get'>
         <input type="text" placeholder='알림 메세지를 적어주세요.' style={{marginRight:'10px', width:'350px'}} name='notice'/>
         <select name="" id="" style={{marginRight:'10px'}}>
           <option value="" name="deck1">1번 데크</option>

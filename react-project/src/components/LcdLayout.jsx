@@ -15,23 +15,26 @@ const LcdLayout = () => {
     console.log("날씽~~",weather);
     console.log(decknum);
 
+    // 임시 camp_manger id 설정
+    let camp_manger = "smhrd1"
+
 
     useEffect(() => {
         // setInterval 꼭 써야하나? useEffect때문에 ref가 바뀌면 당연히 axios 다시 실행될텐데
           setInterval(() => {
             axios.post("/sensor/data", { id: "hi" }).then((res) => {
               sensorData.current = {
-                camp_id:res.data.sensorData.camp_id,
-                deck_id:res.data.sensorData.deck_id,
-                temperature:res.data.sensorData.temperature,
-                humidity:res.data.sensorData.humidity,
-                battery:res.data.sensorData.battery,
-                fire1:res.data.sensorData.fire_1,
-                fire2:res.data.sensorData.fire_2,
-                fire3:res.data.sensorData.fire_3,
-                fire4:res.data.sensorData.fire_4,
-                air:res.data.sensorData.Air,
-                co:res.data.sensorData.Co
+                camp_id:res.data.sensorData[camp_manger][decknum].camp_id,
+                deck_num:res.data.sensorData[camp_manger][decknum].deck_num,
+                temperature:res.data.sensorData[camp_manger][decknum].temperature,
+                humidity:res.data.sensorData[camp_manger][decknum].humidity,
+                battery:res.data.sensorData[camp_manger][decknum].battery,
+                fire1:res.data.sensorData[camp_manger][decknum].fire_1,
+                fire2:res.data.sensorData[camp_manger][decknum].fire_2,
+                fire3:res.data.sensorData[camp_manger][decknum].fire_3,
+                fire4:res.data.sensorData[camp_manger][decknum].fire_4,
+                air:res.data.sensorData[camp_manger][decknum].air,
+                co:res.data.sensorData[camp_manger][decknum].Co
                 }
             });
           }, 1000);
@@ -63,7 +66,7 @@ const LcdLayout = () => {
           </div>
           </div>
         </div>
-        {sensorData.current.deck_id == decknum
+        {sensorData.current.deck_num == decknum
         ? (
             <table className="table" style={{border:'3px solid black'}}>
             {/* 제목 행 */}
@@ -76,7 +79,7 @@ const LcdLayout = () => {
               <th style={{border:'1px solid black'}}>배터리</th>
             </tr>
             <tr style={{border:'1px solid black'}}>
-              <td style={{border:'1px solid black'}}>데크 {sensorData.current.deck_id}</td>
+              <td style={{border:'1px solid black'}}>데크 {sensorData.current.deck_num}</td>
               <td style={{border:'1px solid black'}}>{sensorData.current.co}</td>
               {sensorData.current.temperature > 21 
               ? (<td className="warningRed" style={{border:'1px solid black'}}>{sensorData.current.temperature}</td>) 

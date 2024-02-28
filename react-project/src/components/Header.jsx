@@ -24,7 +24,7 @@ const Header = () => {
     { name: '실시간 관리 페이지', value: '1', to:'/' },
     { name: 'DB 관리 페이지', value: '2', to:'/dbmanage' },
     { name: '알림 페이지', value: '3', to:'/notice' },
-    { name: '로그 아웃', value: '4', to:'/login' },
+    { name: '로그 아웃', value: '4', to:'/login' }
   ];
 
   return (

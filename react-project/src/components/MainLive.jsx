@@ -16,7 +16,14 @@ import { useNavigate } from "react-router-dom";
 const MainLive = () => {
   const navigate = useNavigate();
   // 센서값 (Ref로 바꾸기 / Object로 바꾸기)
-  let sensorData = useRef({})
+  let sensorData1 = useRef({})
+  let sensorData2 = useRef({})
+  let sensorData3 = useRef({})
+  let sensorData4 = useRef({})
+  let sensorData5 = useRef({})
+  let sensorData6 = useRef({})
+
+  
   // 위도, 경도
   let lat;
   let lon;
@@ -26,6 +33,10 @@ const MainLive = () => {
   let year = today.getFullYear;
   let month = today.getMonth() + 1;  // 월
   let date = today.getDate();  // 날짜
+
+
+  //임시 관리자 값 부여
+  let camp_manger = "smhrd1"
 
   // 모달창 열고닫는 boolean
   const [modalShow, setModalShow] = React.useState(false);
@@ -59,22 +70,93 @@ const MainLive = () => {
     // setInterval 꼭 써야하나? useEffect때문에 ref가 바뀌면 당연히 axios 다시 실행될텐데
       setInterval(() => {
         axios.post("/sensor/data", { id: "hi" }).then((res) => {
-          sensorData.current = {
-            camp_id:res.data.sensorData.camp_id,
-            deck_id:res.data.sensorData.deck_id,
-            temperature:res.data.sensorData.temperature,
-            humidity:res.data.sensorData.humidity,
-            battery:res.data.sensorData.battery,
-            fire1:res.data.sensorData.fire_1,
-            fire2:res.data.sensorData.fire_2,
-            fire3:res.data.sensorData.fire_3,
-            fire4:res.data.sensorData.fire_4,
-            air:res.data.sensorData.Air,
-            co:res.data.sensorData.Co
+
+          // console.log('데이터', res.data.sensorData[camp_manger].deck_num);
+          
+            sensorData1.current = {
+                camp_id:res.data.sensorData[camp_manger][1].camp_id,
+                deck_num:res.data.sensorData[camp_manger][1].deck_num,
+                temperature:res.data.sensorData[camp_manger][1].temperature,
+                humidity:res.data.sensorData[camp_manger][1].humidity,
+                battery:res.data.sensorData[camp_manger][1].battery,
+                fire1:res.data.sensorData[camp_manger][1].fire_1,
+                fire2:res.data.sensorData[camp_manger][1].fire_2,
+                fire3:res.data.sensorData[camp_manger][1].fire_3,
+                fire4:res.data.sensorData[camp_manger][1].fire_4,
+                air:res.data.sensorData[camp_manger][1].air,
+                co:res.data.sensorData[camp_manger][1].co
+          }
+            // console.log('서버에서 받아온 값',res.data.sensorData[camp_manger][1].camp_id);
+            // console.log('sensorData1에 넣은 값',sensorData1.current.camp_id);
+            sensorData2.current = {
+              camp_id:res.data.sensorData[camp_manger][2].camp_id,
+              deck_num:res.data.sensorData[camp_manger][2].deck_num,
+              temperature:res.data.sensorData[camp_manger][2].temperature,
+              humidity:res.data.sensorData[camp_manger][2].humidity,
+              battery:res.data.sensorData[camp_manger][2].battery,
+              fire1:res.data.sensorData[camp_manger][2].fire_1,
+              fire2:res.data.sensorData[camp_manger][2].fire_2,
+              fire3:res.data.sensorData[camp_manger][2].fire_3,
+              fire4:res.data.sensorData[camp_manger][2].fire_4,
+              air:res.data.sensorData[camp_manger][2].air,
+              co:res.data.sensorData[camp_manger][2].co
             }
+            sensorData3.current = {
+              camp_id:res.data.sensorData[camp_manger][3].camp_id,
+              deck_num:res.data.sensorData[camp_manger][3].deck_num,
+              temperature:res.data.sensorData[camp_manger][3].temperature,
+              humidity:res.data.sensorData[camp_manger][3].humidity,
+              battery:res.data.sensorData[camp_manger][3].battery,
+              fire1:res.data.sensorData[camp_manger][3].fire_1,
+              fire2:res.data.sensorData[camp_manger][3].fire_2,
+              fire3:res.data.sensorData[camp_manger][3].fire_3,
+              fire4:res.data.sensorData[camp_manger][3].fire_4,
+              air:res.data.sensorData[camp_manger][3].air,
+              co:res.data.sensorData[camp_manger][3].co
+            }
+            sensorData4.current = {
+              camp_id:res.data.sensorData[camp_manger][4].camp_id,
+              deck_num:res.data.sensorData[camp_manger][4].deck_num,
+              temperature:res.data.sensorData[camp_manger][4].temperature,
+              humidity:res.data.sensorData[camp_manger][4].humidity,
+              battery:res.data.sensorData[camp_manger][4].battery,
+              fire1:res.data.sensorData[camp_manger][4].fire_1,
+              fire2:res.data.sensorData[camp_manger][4].fire_2,
+              fire3:res.data.sensorData[camp_manger][4].fire_3,
+              fire4:res.data.sensorData[camp_manger][4].fire_4,
+              air:res.data.sensorData[camp_manger][4].air,
+              co:res.data.sensorData[camp_manger][4].co
+            }
+            sensorData5.current = {
+              camp_id:res.data.sensorData[camp_manger][5].camp_id,
+              deck_num:res.data.sensorData[camp_manger][5].deck_num,
+              temperature:res.data.sensorData[camp_manger][5].temperature,
+              humidity:res.data.sensorData[camp_manger][5].humidity,
+              battery:res.data.sensorData[camp_manger][5].battery,
+              fire1:res.data.sensorData[camp_manger][5].fire_1,
+              fire2:res.data.sensorData[camp_manger][5].fire_2,
+              fire3:res.data.sensorData[camp_manger][5].fire_3,
+              fire4:res.data.sensorData[camp_manger][5].fire_4,
+              air:res.data.sensorData[camp_manger][5].air,
+              co:res.data.sensorData[camp_manger][5].co
+            }
+            sensorData6.current = {
+              camp_id:res.data.sensorData[camp_manger][6].camp_id,
+              deck_num:res.data.sensorData[camp_manger][6].deck_num,
+              temperature:res.data.sensorData[camp_manger][6].temperature,
+              humidity:res.data.sensorData[camp_manger][6].humidity,
+              battery:res.data.sensorData[camp_manger][6].battery,
+              fire1:res.data.sensorData[camp_manger][6].fire_1,
+              fire2:res.data.sensorData[camp_manger][6].fire_2,
+              fire3:res.data.sensorData[camp_manger][6].fire_3,
+              fire4:res.data.sensorData[camp_manger][6].fire_4,
+              air:res.data.sensorData[camp_manger][6].air,
+              co:res.data.sensorData[camp_manger][6].co
+            }
+            
         });
-      }, 1000);
-  }, [sensorData]);
+      }, 1000);     
+  }, [sensorData1, sensorData2]);
 
   // 위치정보(경도, 위도) 받아오기 => getCurrentWeather() 실행
   const getCurrentLocation = () => {
@@ -142,71 +224,73 @@ const MainLive = () => {
               <th style={{border:'1px solid black'}}>배터리</th>
             </tr>
             <tr style={{border:'1px solid black'}}>
-              <td style={{border:'1px solid black'}}>데크 {sensorData.current.deck_id}</td>
-              <td style={{border:'1px solid black'}}>{sensorData.current.co}</td>
-              {sensorData.current.temperature > 21 
-              ? (<td className="warningRed" style={{border:'1px solid black'}}>{sensorData.current.temperature}</td>) 
-              : (<td className="stableGreen" style={{border:'1px solid black'}}>{sensorData.current.temperature}</td>)
+              <td style={{border:'1px solid black'}}>데크1</td>
+              <td style={{border:'1px solid black'}}>{sensorData1.current.co}</td>
+              {sensorData1.current.temperature > 21 
+              ? (<td className="warningRed" style={{border:'1px solid black'}}>{sensorData1.current.temperature}</td>) 
+              : (<td className="stableGreen" style={{border:'1px solid black'}}>{sensorData1.current.temperature}</td>)
               }
-              <td style={{border:'1px solid black'}}>{sensorData.current.humidity}</td>
-              <td style={{border:'1px solid black'}}>{sensorData.current.air}</td>
-              <td style={{border:'1px solid black'}}>{sensorData.current.battery}</td>
+              <td style={{border:'1px solid black'}}>{sensorData1.current.humidity}</td>
+              <td style={{border:'1px solid black'}}>{sensorData1.current.air}</td>
+              <td style={{border:'1px solid black'}}>{sensorData1.current.battery}</td>
             </tr>
             <tr style={{border:'1px solid black'}}>
               <td style={{border:'1px solid black'}}>데크2</td>
-              <td style={{border:'1px solid black'}}>{sensorData.current.co}</td>
-              {sensorData.current.temperature > 21 
-              ? (<td className="warningRed" style={{border:'1px solid black'}}>{sensorData.current.temperature}</td>) 
-              : (<td className="stableGreen" style={{border:'1px solid black'}}>{sensorData.current.temperature}</td>)
+              <td style={{border:'1px solid black'}}>{sensorData2.current.co}</td>
+              {sensorData2.current.temperature > 21 
+              ? (<td className="warningRed" style={{border:'1px solid black'}}>{sensorData2.current.temperature}</td>) 
+              : (<td className="stableGreen" style={{border:'1px solid black'}}>{sensorData2.current.temperature}</td>)
               }
-              <td style={{border:'1px solid black'}}>{sensorData.current.humidity}</td>
-              <td style={{border:'1px solid black'}}>{sensorData.current.air}</td>
-              <td style={{border:'1px solid black'}}>{sensorData.current.battery}</td>
+              <td style={{border:'1px solid black'}}>{sensorData2.current.humidity}</td>
+              <td style={{border:'1px solid black'}}>{sensorData2.current.air}</td>
+              <td style={{border:'1px solid black'}}>{sensorData2.current.battery}</td>
             </tr>
             <tr style={{border:'1px solid black'}}>
-              <td style={{border:'1px solid black'}}>데크3</td>
-              <td style={{border:'1px solid black'}}>{sensorData.current.co}</td>
-              {sensorData.current.temperature > 21 
-              ? (<td className="warningRed" style={{border:'1px solid black'}}>{sensorData.current.temperature}</td>) 
-              : (<td className="stableGreen" style={{border:'1px solid black'}}>{sensorData.current.temperature}</td>)
+              <td style={{border:'1px solid black'}}>데크 3</td>
+              <td style={{border:'1px solid black'}}>{sensorData3.current.co}</td>
+              {sensorData3.current.temperature > 21 
+              ? (<td className="warningRed" style={{border:'1px solid black'}}>{sensorData3.current.temperature}</td>) 
+              : (<td className="stableGreen" style={{border:'1px solid black'}}>{sensorData3.current.temperature}</td>)
               }
-              <td style={{border:'1px solid black'}}>{sensorData.current.humidity}</td>
-              <td style={{border:'1px solid black'}}>{sensorData.current.air}</td>
-              <td style={{border:'1px solid black'}}>{sensorData.current.battery}</td>
+              <td style={{border:'1px solid black'}}>{sensorData3.current.humidity}</td>
+              <td style={{border:'1px solid black'}}>{sensorData3.current.air}</td>
+              <td style={{border:'1px solid black'}}>{sensorData3.current.battery}</td>
             </tr>
             <tr style={{border:'1px solid black'}}>
               <td style={{border:'1px solid black'}}>데크4</td>
-              <td style={{border:'1px solid black'}}>{sensorData.current.co}</td>
-              {sensorData.current.temperature > 21 
-              ? (<td className="warningRed" style={{border:'1px solid black'}}>{sensorData.current.temperature}</td>) 
-              : (<td className="stableGreen" style={{border:'1px solid black'}}>{sensorData.current.temperature}</td>)
+              <td style={{border:'1px solid black'}}>{sensorData4.current.co}</td>
+              {sensorData4.current.temperature > 21 
+              ? (<td className="warningRed" style={{border:'1px solid black'}}>{sensorData4.current.temperature}</td>) 
+              : (<td className="stableGreen" style={{border:'1px solid black'}}>{sensorData4.current.temperature}</td>)
               }
-              <td style={{border:'1px solid black'}}>{sensorData.current.humidity}</td>
-              <td style={{border:'1px solid black'}}>{sensorData.current.air}</td>
-              <td style={{border:'1px solid black'}}>{sensorData.current.battery}</td>
+              <td style={{border:'1px solid black'}}>{sensorData4.current.humidity}</td>
+              <td style={{border:'1px solid black'}}>{sensorData4.current.air}</td>
+              <td style={{border:'1px solid black'}}>{sensorData4.current.battery}</td>
             </tr>
             <tr style={{border:'1px solid black'}}>
               <td style={{border:'1px solid black'}}>데크5</td>
-              <td style={{border:'1px solid black'}}>{sensorData.current.co}</td>
-              {sensorData.current.temperature > 21 
-              ? (<td className="warningRed" style={{border:'1px solid black'}}>{sensorData.current.temperature}</td>) 
-              : (<td className="stableGreen" style={{border:'1px solid black'}}>{sensorData.current.temperature}</td>)
+              <td style={{border:'1px solid black'}}>{sensorData5.current.co}</td>
+              {sensorData5.current.temperature > 21 
+              ? (<td className="warningRed" style={{border:'1px solid black'}}>{sensorData5.current.temperature}</td>) 
+              : (<td className="stableGreen" style={{border:'1px solid black'}}>{sensorData5.current.temperature}</td>)
               }
-              <td style={{border:'1px solid black'}}>{sensorData.current.humidity}</td>
-              <td style={{border:'1px solid black'}}>{sensorData.current.air}</td>
-              <td style={{border:'1px solid black'}}>{sensorData.current.battery}</td>
+              <td style={{border:'1px solid black'}}>{sensorData5.current.humidity}</td>
+              <td style={{border:'1px solid black'}}>{sensorData5.current.air}</td>
+              <td style={{border:'1px solid black'}}>{sensorData5.current.battery}</td>
             </tr>
             <tr style={{border:'1px solid black'}}>
               <td style={{border:'1px solid black'}}>데크6</td>
-              <td style={{border:'1px solid black'}}>{sensorData.current.co}</td>
-              {sensorData.current.temperature > 21 
-              ? (<td className="warningRed" style={{border:'1px solid black'}}>{sensorData.current.temperature}</td>) 
-              : (<td className="stableGreen" style={{border:'1px solid black'}}>{sensorData.current.temperature}</td>)
+              <td style={{border:'1px solid black'}}>{sensorData6.current.co}</td>
+              {sensorData6.current.temperature > 21 
+              ? (<td className="warningRed" style={{border:'1px solid black'}}>{sensorData6.current.temperature}</td>) 
+              : (<td className="stableGreen" style={{border:'1px solid black'}}>{sensorData6.current.temperature}</td>)
               }
-              <td style={{border:'1px solid black'}}>{sensorData.current.humidity}</td>
-              <td style={{border:'1px solid black'}}>{sensorData.current.air}</td>
-              <td style={{border:'1px solid black'}}>{sensorData.current.battery}</td>
+              <td style={{border:'1px solid black'}}>{sensorData6.current.humidity}</td>
+              <td style={{border:'1px solid black'}}>{sensorData6.current.air}</td>
+              <td style={{border:'1px solid black'}}>{sensorData6.current.battery}</td>
             </tr>
+            
+          
           </table>
         </div>
 

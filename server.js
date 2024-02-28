@@ -52,10 +52,30 @@ io.on('connection', (socket) => {
   socket.on('sensorData', (data)=>{
     // 여기에서 받아온 값을 변수에 넣어서 여기저기 보내주자!!
     // 각자 보낼지, 묶어서 보낼지 고민중...(어차피 다 띄울거니깐 묶어서 보내자!)
+  
+    // sensorData[`${data.camp_id}_${data.deck_num}`] = data
     
-    sensorData[data.id] = data
-    // console.log('나롱이 ==>', sensorData);
 
+    // 희재씨 코드
+    if (!sensorData[data.camp_id]) {
+      sensorData[data.camp_id] = {};
+      }
+      
+      sensorData[data.camp_id][data.deck_num] = {
+          camp_id:data.camp_id,
+          deck_num:data.deck_num,
+          temperature : data.temperature,
+          humidity : data.humidity,
+          battery : data.battery,
+          fire_1 : data.fire_1,
+          fire_2 : data.fire_2,
+          fire_3 : data.fire_3,
+          fire_4 : data.fire_4,
+          air : data.Air,
+          co : data.Co
+      };
+
+    console.log(sensorData);
     receiveSensorData(sensorData) // index.js에 있는 함수
     
     // module.exports = sensorData;

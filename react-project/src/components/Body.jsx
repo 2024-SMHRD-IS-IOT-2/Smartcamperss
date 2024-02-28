@@ -4,7 +4,7 @@
 import React from 'react'
 import "../App.css";
 import Login from './Login'
-import Signup from './Join'
+import Join from './Join'
 import MainLive from './MainLive'
 import Header from './Header'
 import Notice from './Notice'
