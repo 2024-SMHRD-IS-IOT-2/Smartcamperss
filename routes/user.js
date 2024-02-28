@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const conn = require('../config/database');
 
-//**회원가입 시, ID 중복체크
+// 회원가입 시, ID 중복체크
 router.post('/checkId', (req,res)=>{
     console.log('ID중복체크 요청...', req.body);
 
@@ -28,7 +28,7 @@ router.post('/checkId', (req,res)=>{
 });
 
 
-//**회원가입 라우터
+// 회원가입 라우터
 router.post('/join',(req,res)=>{
     console.log('회원가입 요청...', req.body);
 
@@ -53,8 +53,8 @@ router.post('/join',(req,res)=>{
 
 
 
-// **로그인 라우터
-router.post('/', (req,res)=>{
+// 로그인 라우터
+router.post('/login', (req,res)=>{
     console.log('로그인 요청..', req.body);
 
     // DB연동코드 추가
