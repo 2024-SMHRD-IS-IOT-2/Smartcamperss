@@ -181,13 +181,15 @@ const MainLive = () => {
           };
           */
           
-          // 우선 "온도"에 따라 반응하는지 알아보기
-          if (res.data.sensorData[camp_manger][1].temperature > 23) {
-            alert("위험위험!~");
+          // co > 25ppm 이면 위험!!(시간당)
+          if (res.data.sensorData[camp_manger][1].co > 25 
+            || res.data.sensorData[camp_manger][1].air >= 70 
+            || res.data.sensorData[camp_manger][1].fire1 >=240
+            || res.data.sensorData[camp_manger][1].fire2 < 1000
+            || res.data.sensorData[camp_manger][1].fire3 < 1000
+            || res.data.sensorData[camp_manger][1].fire4 < 1000) {
+            alert("위험이 감지되었습니다!!!");
             clearInterval(getSensorData);
-            setTimeout(function() {
-              getSensorData();
-            }, 10000);
           }
         });
       }, 5000);
