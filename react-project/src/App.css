@@ -44,3 +44,16 @@ table, th, td{
 }
 
 /* Signup.jsx */
+
+
+/* 눈누글씨체 로그인 스마트캠퍼즈글씨  */
+@font-face {
+  font-family: 'JalnanGothic';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_231029@1.1/JalnanGothic.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+/*회원가입글씨 가운데 정렬*/
+.centered-text {
+  text-align: center;
+}
