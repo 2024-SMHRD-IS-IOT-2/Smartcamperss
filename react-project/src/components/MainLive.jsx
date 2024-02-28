@@ -267,14 +267,14 @@ const MainLive = () => {
             </tr>
             <tr style={{ border: "1px solid black" }}>
               <td style={{ border: "1px solid black" }}>데크1</td>
-              {sensorData1.co < 20 ? (
+              {sensorData1.co < 60 ? (
                 <td
                   className="stableGreen"
                   style={{ border: "1px solid black" }}
                 >
                   {sensorData1.co}
                 </td>
-              ) : sensorData1.co < 25 ? (
+              ) : sensorData1.co < 73 ? (
                 <td
                   className="warningOrange"
                   style={{ border: "1px solid black" }}
