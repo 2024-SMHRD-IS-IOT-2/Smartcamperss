@@ -26,8 +26,6 @@ const MainLive = () => {
     battery: 0,
     fire_1: 0,
     fire_2: 0,
-    fire_3: 0,
-    fire_4: 0,
     air: 0,
     co: 0,
   });
@@ -36,7 +34,6 @@ const MainLive = () => {
   let sensorData4 = useRef({});
   let sensorData5 = useRef({});
   let sensorData6 = useRef({});
-
   // 위도, 경도
   let lat;
   let lon;
@@ -48,7 +45,7 @@ const MainLive = () => {
   let date = today.getDate(); // 날짜
 
   //임시 관리자 값 부여
-  let camp_manger = "smhrd1";
+  let camp_manger = user.id;
 
   // 모달창 열고닫는 boolean
   const [modalShow, setModalShow] = React.useState(false);
@@ -56,7 +53,7 @@ const MainLive = () => {
   // 오늘날씨 API
   const { weather, setWeather } = useContext(ClimateContext); // state에서 context로 바꿔서 App.js로 올림 => LCD에서도 쓰려고
   // const [weather, setWeather] = useState(null);
-  // const [forecast5days, setForecast5days] = useState(null);
+  const [forecast5days, setForecast5days] = useState(null);
 
   // LCD로 센서값(sensorData) 보내는 함수
   const goToLCDPage_1 = () => {
@@ -92,8 +89,6 @@ const MainLive = () => {
             battery: res.data.sensorData[camp_manger][1].battery,
             fire1: res.data.sensorData[camp_manger][1].fire_1,
             fire2: res.data.sensorData[camp_manger][1].fire_2,
-            fire3: res.data.sensorData[camp_manger][1].fire_3,
-            fire4: res.data.sensorData[camp_manger][1].fire_4,
             air: res.data.sensorData[camp_manger][1].air,
             co: res.data.sensorData[camp_manger][1].co,
           })
@@ -107,8 +102,6 @@ const MainLive = () => {
             battery: res.data.sensorData[camp_manger][1].battery,
             fire1: res.data.sensorData[camp_manger][1].fire_1,
             fire2: res.data.sensorData[camp_manger][1].fire_2,
-            fire3: res.data.sensorData[camp_manger][1].fire_3,
-            fire4: res.data.sensorData[camp_manger][1].fire_4,
             air: res.data.sensorData[camp_manger][1].air,
             co: res.data.sensorData[camp_manger][1].co,
           };
@@ -122,8 +115,6 @@ const MainLive = () => {
             battery: res.data.sensorData[camp_manger][2].battery,
             fire1: res.data.sensorData[camp_manger][2].fire_1,
             fire2: res.data.sensorData[camp_manger][2].fire_2,
-            fire3: res.data.sensorData[camp_manger][2].fire_3,
-            fire4: res.data.sensorData[camp_manger][2].fire_4,
             air: res.data.sensorData[camp_manger][2].air,
             co: res.data.sensorData[camp_manger][2].co,
           };
@@ -135,8 +126,6 @@ const MainLive = () => {
             battery: res.data.sensorData[camp_manger][3].battery,
             fire1: res.data.sensorData[camp_manger][3].fire_1,
             fire2: res.data.sensorData[camp_manger][3].fire_2,
-            fire3: res.data.sensorData[camp_manger][3].fire_3,
-            fire4: res.data.sensorData[camp_manger][3].fire_4,
             air: res.data.sensorData[camp_manger][3].air,
             co: res.data.sensorData[camp_manger][3].co,
           };
@@ -148,8 +137,6 @@ const MainLive = () => {
             battery: res.data.sensorData[camp_manger][4].battery,
             fire1: res.data.sensorData[camp_manger][4].fire_1,
             fire2: res.data.sensorData[camp_manger][4].fire_2,
-            fire3: res.data.sensorData[camp_manger][4].fire_3,
-            fire4: res.data.sensorData[camp_manger][4].fire_4,
             air: res.data.sensorData[camp_manger][4].air,
             co: res.data.sensorData[camp_manger][4].co,
           };
@@ -161,8 +148,6 @@ const MainLive = () => {
             battery: res.data.sensorData[camp_manger][5].battery,
             fire1: res.data.sensorData[camp_manger][5].fire_1,
             fire2: res.data.sensorData[camp_manger][5].fire_2,
-            fire3: res.data.sensorData[camp_manger][5].fire_3,
-            fire4: res.data.sensorData[camp_manger][5].fire_4,
             air: res.data.sensorData[camp_manger][5].air,
             co: res.data.sensorData[camp_manger][5].co,
           };
@@ -174,22 +159,18 @@ const MainLive = () => {
             battery: res.data.sensorData[camp_manger][6].battery,
             fire1: res.data.sensorData[camp_manger][6].fire_1,
             fire2: res.data.sensorData[camp_manger][6].fire_2,
-            fire3: res.data.sensorData[camp_manger][6].fire_3,
-            fire4: res.data.sensorData[camp_manger][6].fire_4,
             air: res.data.sensorData[camp_manger][6].air,
             co: res.data.sensorData[camp_manger][6].co,
           };
           */
           
           // co > 25ppm 이면 위험!!(시간당)
-          if (res.data.sensorData[camp_manger][1].co > 25 
+          if (res.data.sensorData[camp_manger][1].co > 73 
             || res.data.sensorData[camp_manger][1].air >= 70 
             || res.data.sensorData[camp_manger][1].fire1 >=240
-            || res.data.sensorData[camp_manger][1].fire2 < 1000
-            || res.data.sensorData[camp_manger][1].fire3 < 1000
-            || res.data.sensorData[camp_manger][1].fire4 < 1000) {
+            || res.data.sensorData[camp_manger][1].fire2 < 1000) {
             alert("위험이 감지되었습니다!!!");
-            clearInterval(getSensorData);
+            return ()=> clearInterval(getSensorData);
           }
         });
       }, 5000);
@@ -221,18 +202,19 @@ const MainLive = () => {
   // };
 
   // 5일간 일기예보(response.data) 받아오기
-  //   const getForecast5days = async () => {
-  //     try {
-  //         const API_KEY = process.env.REACT_APP_FORECAST_KEY;
-  //         let weather_url = `https://apis.data.go.kr/1360000/MidFcstInfoService/getMidFcst?serviceKey=${API_KEY}&numOfRows=10&dataType=JSON&stnId=156&pageNo=1&regId=11F20000&tmFc=202402291800`;
+    // const getForecast5days = async () => {
+    //   try {
+    //       const API_KEY = process.env.REACT_APP_FORECAST_KEY;
+    //       let weather_url = `https://apihub.kma.go.kr/api/typ01/url/kma_sfcdd.php?tm=20150715&stn=0&help=1&authKey=${API_KEY}`;
 
-  //         let response = await axios.get(weather_url);
-  //         setForecast5days(response.data);
-  //         console.log("기상예보 :", forecast5days);
-  //     } catch (error) {
-  //         console.error('5일 예보 데이터 가져오기 실패:', error.message);
-  //     }
-  // };
+    //       let response = await axios.get(weather_url);
+    //       setForecast5days(response.data);
+    //       console.log('haha',response.data);
+    //       console.log("기상예보 :", forecast5days);
+    //   } catch (error) {
+    //       console.error('5일 예보 데이터 가져오기 실패:', error.message);
+    //   }
+    // };
   // // mounting 될 때, 날씨 띄우기
   // useEffect(() => {
   //   // eslint-disable-next-line

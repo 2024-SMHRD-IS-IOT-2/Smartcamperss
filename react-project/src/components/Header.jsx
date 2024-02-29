@@ -38,7 +38,8 @@ const Header = () => {
       { name: '실시간 관리 페이지', value: '1', to:'/mainlive' },
       { name: 'DB 관리 페이지', value: '2', to:'/dbmanage' },
       { name: '알림 페이지', value: '3', to:'/notice' },
-      { name: '로그 아웃', value: '4', onClick: handleLogout },
+      { name: '마이페이지', value: '4', to:'/mypage' }, //
+      { name: '로그 아웃', value: '5', onClick: handleLogout },
     ]
   ) : null;
 
@@ -56,7 +57,7 @@ const Header = () => {
               style={{width:'200px'}}
               id={`radio-${idx}`}
               type="radio"
-              variant={radio.value==='4'? 'outline-danger' : 'outline-success'}
+              variant={radio.value==='5'? 'outline-danger' : 'outline-success'}
               name="radio"
               value={radio.value}
               checked={radioValue === radio.value}

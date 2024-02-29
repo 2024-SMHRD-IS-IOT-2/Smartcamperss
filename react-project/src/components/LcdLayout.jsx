@@ -7,52 +7,71 @@ import { ClimateContext } from '../context/ClimateContext';
 import { useParams } from 'react-router-dom';
 import axios from '../axios';
 
-
 const LcdLayout = () => {
-  const [sensorData1, setSensorData1] = useState({
-    camp_id: "",
-    deck_num: 0,
-    temperature: 0,
-    humidity: 0,
-    battery: 0,
-    fire_1: 0,
-    fire_2: 0,
-    fire_3: 0,
-    fire_4: 0,
-    air: 0,
-    co: 0,
-  });
+
+    //센서 데이터 넣는 공간
+    const sensorData = useRef({});
+
+    // useParams를 활용한 데크 번호 넣기
     const {decknum} = useParams();
+
+
+    //날씨 관련
     const today = new Date();
     const {weather} = useContext(ClimateContext);
-    console.log("날씽~~",weather);
-    console.log(decknum);
 
+    //데크 메세지 변수 정의
+    const [deckMessages, setDeckMessages] = useState([]); 
 
-    // 임시 camp_manger id 설정
-    let camp_manger = "smhrd1"
+    //데크 메세지 가져오는 함수 선언
+    const getDeckMessages = async () => {
+      try {
+        const response = await axios.get(`/notice/${decknum}`);
+        setDeckMessages(response.data);
+      } catch (error) {
+        console.error('Error fetching deck messages:', error);
+      }
+    };
 
-
-        // setInterval 꼭 써야하나? useEffect때문에 ref가 바뀌면 당연히 axios 다시 실행될텐데
-          setInterval(() => {
+    
+    // 센서 데이터를 주기적으로 가져옴
+    // 페이지를 나가면 clearinterval 하여 더이상 반복되서 실행되지 않게 해줌
+    useEffect(() => {
+          const sensor_interval = setInterval(() => {
             axios.post("/sensor/data", { id: "hi" }).then((res) => {
-              setSensorData1({
-                camp_id: res.data.sensorData[camp_manger][1].camp_id,
-                deck_num: res.data.sensorData[camp_manger][1].deck_num,
-                temperature: res.data.sensorData[camp_manger][1].temperature,
-                humidity: res.data.sensorData[camp_manger][1].humidity,
-                battery: res.data.sensorData[camp_manger][1].battery,
-                fire1: res.data.sensorData[camp_manger][1].fire_1,
-                fire2: res.data.sensorData[camp_manger][1].fire_2,
-                fire3: res.data.sensorData[camp_manger][1].fire_3,
-                fire4: res.data.sensorData[camp_manger][1].fire_4,
-                air: res.data.sensorData[camp_manger][1].air,
-                co: res.data.sensorData[camp_manger][1].co,
-              })
+              sensorData.current = {
+                camp_id:res.data.sensorData.camp_id,
+                deck_id:res.data.sensorData.deck_id,
+                temperature:res.data.sensorData.temperature,
+                humidity:res.data.sensorData.humidity,
+                battery:res.data.sensorData.battery,
+                fire1:res.data.sensorData.fire_1,
+                fire2:res.data.sensorData.fire_2,
+                fire3:res.data.sensorData.fire_3,
+                fire4:res.data.sensorData.fire_4,
+                air:res.data.sensorData.Air,
+                co:res.data.sensorData.Co
+                }
             });
-          }, 5000);
+          }, 1000);
+          return () => clearInterval(sensor_interval);
+      }, [sensorData]);
 
-      console.log('hong', sensorData1);
+
+    // 맨처음에 deckmessages를 가져옵니다
+    useEffect(()=>{
+      getDeckMessages();
+    },[])
+
+    // sendMessage 함수가 실행되었을 때 useEffect를 사용하여 새로운 메시지를 가져옴
+    // 페이지를 나가면 clearinterval 하여 더이상 반복되서 실행되지 않게 해줌
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+          getDeckMessages();
+        }, 5000); // 5초마다 새로운 메시지를 가져옴
+        return () => clearInterval(interval);
+    }, []);
 
 
 
@@ -77,7 +96,7 @@ const LcdLayout = () => {
           </div>
           </div>
         </div>
-        {sensorData1.deck_num == decknum
+        {sensorData.current.deck_id == decknum
         ? (
             <table className="table" style={{border:'3px solid black'}}>
             {/* 제목 행 */}
@@ -90,22 +109,28 @@ const LcdLayout = () => {
               <th style={{border:'1px solid black'}}>배터리</th>
             </tr>
             <tr style={{border:'1px solid black'}}>
-              <td style={{border:'1px solid black'}}>데크 {sensorData1.deck_num}</td>
-              <td style={{border:'1px solid black'}}>{sensorData1.co}</td>
-              {sensorData1.temperature > 21 
-              ? (<td className="warningRed" style={{border:'1px solid black'}}>{sensorData1.temperature}</td>) 
-              : (<td className="stableGreen" style={{border:'1px solid black'}}>{sensorData1.temperature}</td>)
+              <td style={{border:'1px solid black'}}>데크 {sensorData.current.deck_id}</td>
+              <td style={{border:'1px solid black'}}>{sensorData.current.co}</td>
+              {sensorData.current.temperature > 21 
+              ? (<td className="warningRed" style={{border:'1px solid black'}}>{sensorData.current.temperature}</td>) 
+              : (<td className="stableGreen" style={{border:'1px solid black'}}>{sensorData.current.temperature}</td>)
               }
-              <td style={{border:'1px solid black'}}>{sensorData1.humidity}</td>
-              <td style={{border:'1px solid black'}}>{sensorData1.air}</td>
-              <td style={{border:'1px solid black'}}>{sensorData1.battery}</td>
+              <td style={{border:'1px solid black'}}>{sensorData.current.humidity}</td>
+              <td style={{border:'1px solid black'}}>{sensorData.current.air}</td>
+              <td style={{border:'1px solid black'}}>{sensorData.current.battery}</td>
             </tr>
         </table>
         )
         : (null)
         }
-
-        
+        {/* deckmessages를 map함수로 뛰워줌 */}
+        <div style={{backgroundColor:'white'}}>
+            <ul>
+            {deckMessages.map((message, index) => (
+            <li key={index}>{message}</li>
+              ))}
+            </ul>
+        </div>
     </div>
   )
 }

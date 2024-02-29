@@ -10,6 +10,7 @@ import Notice from './Notice'
 import { Route, Routes } from 'react-router-dom';
 import LcdLayout from './LcdLayout'
 import Join from './Join';
+import MyPage from './MyPage';
 
 
 const Body = () => {
@@ -22,6 +23,7 @@ const Body = () => {
         <Routes>
           <Route path='/' element={<Login/>}/>
           <Route path='/join' element={<Join/>}/>
+          <Route path='/mypage' element={<MyPage/>}/>
           <Route path='/mainlive' element={<MainLive/>}/>
           <Route path='/notice' element={<Notice/>}/>
           <Route path='/lcd/:decknum' element={<LcdLayout/>}/>

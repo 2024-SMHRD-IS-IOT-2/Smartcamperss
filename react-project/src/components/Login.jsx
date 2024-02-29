@@ -18,7 +18,7 @@ const Login = () => {
         // 로그인 성공 : success | 로그인 실패 : fail
         if (res.data.result === 'success') {
           alert('로그인 성공!');
-          sessionStorage.setItem('user', JSON.stringify(res.data.user));
+          sessionStorage.setItem('user', JSON.stringify(res.data.user)); //세션생성
           navigate('/mainlive');
         } else {
           alert('아이디 혹은 비밀번호를 확인해주세요.');

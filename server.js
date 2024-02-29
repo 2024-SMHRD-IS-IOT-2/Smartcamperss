@@ -9,6 +9,10 @@ const io = socketIo(server);
 // module 여러개 받는 방법
 const indexRouter = require('./routes/index');
 const userRouter = require('./routes/user');
+
+// *******notice 모듈 추가 *******
+const noticeRouter = require('./routes/notice');
+
 const {receiveSensorData, sensorRouter} = require('./routes/sensor');
 
 
@@ -37,6 +41,9 @@ app.use(express.urlencoded({extended : true}));
 app.use('/', indexRouter);
 app.use('/user', userRouter);
 app.use('/sensor', sensorRouter);
+
+// *******notice router 추가 *******
+app.use('/notice', noticeRouter);
 
 // let temperature = 0;
 // let humidity = 0;
