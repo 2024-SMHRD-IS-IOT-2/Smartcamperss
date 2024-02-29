@@ -11,6 +11,7 @@ import { Route, Routes } from 'react-router-dom';
 import LcdLayout from './LcdLayout'
 import Join from './Join';
 import MyPage from './MyPage';
+import DBManage from './DBManage';
 
 
 const Body = () => {
@@ -23,6 +24,8 @@ const Body = () => {
         <Routes>
           <Route path='/' element={<Login/>}/>
           <Route path='/join' element={<Join/>}/>
+          <Route path='/dbmanage' element={<DBManage/>}/>
+      
           <Route path='/mypage' element={<MyPage/>}/>
           <Route path='/mainlive' element={<MainLive/>}/>
           <Route path='/notice' element={<Notice/>}/>

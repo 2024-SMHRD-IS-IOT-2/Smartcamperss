@@ -49,8 +49,6 @@ router.post('/join',(req,res)=>{
 
 
 
-
-
 //**  로그인 라우터
 router.post('/login', (req,res)=>{
     console.log('로그인 요청..', req.body);
@@ -120,6 +118,76 @@ router.post('/modify', (req,res)=>{
         }
     })
 });
+
+
+
+// **메세지 내역 검색 라우터
+router.post('/select_message', (req, res) => {
+    console.log('메세지 내역검색', req.body);
+    const { id } = req.body;
+    const searchmessage = 'SELECT * FROM tb_message WHERE mem_id=?';
+    conn.query(searchmessage, [id], (err, rows) => {
+        if (err) {
+            console.error('메세지 내역 불러오기 실패:', err);
+            res.status(500).json({ error: '메세지 내역 불러오기 실패' });
+        } else {
+            console.log('메세지 내역 불러오기 성공');
+            res.json({ rows: rows });
+        }
+    });
+});
+
+// **일산화탄소 내역 검색 라우터
+router.post('/select_co', (req, res) => {
+    console.log('일산화탄소 내역검색', req.body);
+    const { id } = req.body;
+    const searchco = 'SELECT * FROM tb_co_warning WHERE mem_id=?';
+    conn.query(searchco, [id], (err, rows) => {
+        if (err) {
+            console.error('일산화탄소 내역 불러오기 실패:', err);
+            res.status(500).json({ error: '일산화탄소 내역 불러오기 실패' });
+        } else {
+            console.log('일산화탄소 내역 불러오기 성공');
+            res.json({ rows: rows });
+        }
+    });
+});
+
+
+
+// **불꽃감지 내역 검색 라우터
+router.post('/select_flame', (req, res) => {
+    console.log('불꽃감지 내역검색', req.body);
+    const { id } = req.body;
+    const searchflame = 'SELECT * FROM tb_flame_warning WHERE mem_id=?';
+    conn.query(searchflame, [id], (err, rows) => {
+        if (err) {
+            console.error('불꽃감지 내역 불러오기 실패:', err);
+            res.status(500).json({ error: '일산화탄소 내역 불러오기 실패' });
+        } else {
+            console.log('불꽃감지 내역 불러오기 성공');
+            res.json({ rows: rows });
+        }
+    });
+});
+
+// **가스경고메세지 내역 검색 라우터
+router.post('/select_gas', (req, res) => {
+    console.log('가스경고메시지 내역검색', req.body);
+    const { id } = req.body;
+    const searchgas = 'SELECT * FROM tb_gas_warning WHERE mem_id=?';
+    conn.query(searchgas, [id], (err, rows) => {
+        if (err) {
+            console.error('가스감지 내역 불러오기 실패:', err);
+            res.status(500).json({ error: '가스감지 내역 불러오기 실패' });
+        } else {
+            console.log('가스감지 내역 불러오기 성공');
+            res.json({ rows: rows });
+        }
+    });
+});
+
+
 
 module.exports = router;
 
