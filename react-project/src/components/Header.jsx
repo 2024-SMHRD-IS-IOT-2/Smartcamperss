@@ -54,7 +54,8 @@ const Header = () => {
       <div style={{width:'100px'}}></div>
       <ButtonGroup style={style.buttons}>
         {renderButtons && renderButtons.map((radio, idx) => (
-          <Link to={radio.to} key={idx}>
+          <div className='link-wrapper'>
+            <Link to={radio.to} key={idx}>
             <ToggleButton
               style={{width:'200px'}}
               id={`radio-${idx}`}
@@ -69,6 +70,7 @@ const Header = () => {
               {radio.name}
             </ToggleButton>
           </Link>
+          </div>
         ))}
       </ButtonGroup>
     </div>

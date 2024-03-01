@@ -26,6 +26,8 @@ const Login = () => {
           navigate('/');
         }
       });
+
+      axios.post('/notice/userId', {id: idRef.current.value})
   };
 
   return (

@@ -66,6 +66,7 @@ io.on('connection', (socket) => {
     // 희재씨 코드
     if (!sensorData[data.camp_id]) {
       sensorData[data.camp_id] = {};
+      sensorData[data.deck_num] = data.deck_num;
       }
       
       sensorData[data.camp_id][data.deck_num] = {
@@ -76,10 +77,9 @@ io.on('connection', (socket) => {
           battery : data.battery,
           fire_1 : data.fire_1,
           fire_2 : data.fire_2,
-          fire_3 : data.fire_3,
-          fire_4 : data.fire_4,
           air : data.Air,
-          co : data.Co
+          co : data.Co,
+          btn : data.Btn
       };
 
     console.log(sensorData);
@@ -102,6 +102,5 @@ io.on('connection', (socket) => {
   
   server.listen(app.get('port'), () => {
     console.log(`Server running on port ${app.get('port')}`);
-    console.log('server is fine')
   });
   
