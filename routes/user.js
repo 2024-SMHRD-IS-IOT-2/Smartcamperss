@@ -125,7 +125,7 @@ router.post('/modify', (req,res)=>{
 router.post('/select_message', (req, res) => {
     console.log('메세지 내역검색', req.body);
     const { id } = req.body;
-    const searchmessage = 'SELECT * FROM tb_message WHERE mem_id=?';
+    const searchmessage = 'SELECT * FROM tb_message WHERE mem_id=?  ORDER BY msg_time DESC';
     conn.query(searchmessage, [id], (err, rows) => {
         if (err) {
             console.error('메세지 내역 불러오기 실패:', err);
@@ -141,7 +141,7 @@ router.post('/select_message', (req, res) => {
 router.post('/select_co', (req, res) => {
     console.log('일산화탄소 내역검색', req.body);
     const { id } = req.body;
-    const searchco = 'SELECT * FROM tb_co_warning WHERE mem_id=?';
+    const searchco = 'SELECT * FROM tb_co_warning WHERE mem_id=? ORDER BY alert_time DESC';
     conn.query(searchco, [id], (err, rows) => {
         if (err) {
             console.error('일산화탄소 내역 불러오기 실패:', err);
@@ -159,7 +159,7 @@ router.post('/select_co', (req, res) => {
 router.post('/select_flame', (req, res) => {
     console.log('불꽃감지 내역검색', req.body);
     const { id } = req.body;
-    const searchflame = 'SELECT * FROM tb_flame_warning WHERE mem_id=?';
+    const searchflame = 'SELECT * FROM tb_flame_warning WHERE mem_id=? ORDER BY alert_time DESC';
     conn.query(searchflame, [id], (err, rows) => {
         if (err) {
             console.error('불꽃감지 내역 불러오기 실패:', err);
@@ -175,7 +175,7 @@ router.post('/select_flame', (req, res) => {
 router.post('/select_gas', (req, res) => {
     console.log('가스경고메시지 내역검색', req.body);
     const { id } = req.body;
-    const searchgas = 'SELECT * FROM tb_gas_warning WHERE mem_id=?';
+    const searchgas = 'SELECT * FROM tb_gas_warning WHERE mem_id=? ORDER BY alert_time DESC';
     conn.query(searchgas, [id], (err, rows) => {
         if (err) {
             console.error('가스감지 내역 불러오기 실패:', err);
