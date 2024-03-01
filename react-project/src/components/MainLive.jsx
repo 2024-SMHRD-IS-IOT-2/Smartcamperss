@@ -19,7 +19,19 @@ const MainLive = () => {
 
   const navigate = useNavigate();
   // 센서값 (Ref로 바꾸기 / Object로 바꾸기)
-  const [sensorData1, setSensorData1] = useState({
+  // const [sensorData, setsensorData] = useState({
+  //   camp_id: "",
+  //   deck_num: 0,
+  //   temperature: 0,
+  //   humidity: 0,
+  //   battery: 0,
+  //   fire_1: 0,
+  //   fire_2: 0,
+  //   air: 0,
+  //   co: 0,
+  //   btn:0
+  // });
+  let sensorData = useRef({
     camp_id: "",
     deck_num: 0,
     temperature: 0,
@@ -31,18 +43,17 @@ const MainLive = () => {
     co: 0,
     btn:0
   });
-  let sensorData2 = useRef({});
-  let sensorData3 = useRef({});
-  let sensorData4 = useRef({});
-  let sensorData5 = useRef({});
-  let sensorData6 = useRef({});
+
+  // alert창 중복으로 뜨지 않기 위한 코드
+  const [alertShown, setAlertShown] = useState(false);
+
   // 위도, 경도
   let lat;
   let lon;
 
   //현재 시간
   let today = new Date();
-  let year = today.getFullYear;
+  // let year = today.getFullYear;
   let month = today.getMonth() + 1; // 월
   let date = today.getDate(); // 날짜
 
@@ -55,7 +66,7 @@ const MainLive = () => {
   // 오늘날씨 API
   const { weather, setWeather } = useContext(ClimateContext); // state에서 context로 바꿔서 App.js로 올림 => LCD에서도 쓰려고
   // const [weather, setWeather] = useState(null);
-  const [forecast5days, setForecast5days] = useState(null);
+  // const [forecast5days, setForecast5days] = useState(null);
 
   // LCD로 센서값(sensorData) 보내는 함수
   const goToLCDPage_1 = () => {
@@ -83,31 +94,19 @@ const MainLive = () => {
   });
 
   // 버튼 중복 막는 boolean
-  const [checkBtn, setCheckBtn] = useState(false);
+  // const [checkBtn, setCheckBtn] = useState(false);
   // 알림창 중복띄우는걸 막는 boolean
-  const [checkWarning, setCheckWarning] = useState(false);
+  // const [checkWarning, setCheckWarning] = useState(false);
   
 
   // setInterval 꼭 써야하나? useEffect때문에 ref가 바뀌면 당연히 axios 다시 실행될텐데
-  function getSensorData() {
-    setInterval(() => {
-      axios.post("/sensor/data", { id: "hi" }).then((res) => {
-        // console.log('데이터', res.data.sensorData[camp_manger].deck_num);
-        setSensorData1({
-          camp_id: res.data.sensorData[camp_manger][1].camp_id,
-          deck_num: res.data.sensorData[camp_manger][1].deck_num,
-          temperature: res.data.sensorData[camp_manger][1].temperature,
-          humidity: res.data.sensorData[camp_manger][1].humidity,
-          battery: res.data.sensorData[camp_manger][1].battery,
-          fire1: res.data.sensorData[camp_manger][1].fire_1,
-          fire2: res.data.sensorData[camp_manger][1].fire_2,
-          air: res.data.sensorData[camp_manger][1].air,
-          co: res.data.sensorData[camp_manger][1].co,
-          btn: res.data.sensorData[camp_manger][1].btn
-        });
+  useEffect(()=>{
 
-        /*
-          sensorData1.current = {
+    function getSensorData() {
+      setInterval(() => {
+        axios.post("/sensor/data", { id: "hi" }).then((res) => {
+          console.log('메인페이지에서 받아온 값', res.data.sensorData[camp_manger]);
+          sensorData.current={
             camp_id: res.data.sensorData[camp_manger][1].camp_id,
             deck_num: res.data.sensorData[camp_manger][1].deck_num,
             temperature: res.data.sensorData[camp_manger][1].temperature,
@@ -117,155 +116,101 @@ const MainLive = () => {
             fire2: res.data.sensorData[camp_manger][1].fire_2,
             air: res.data.sensorData[camp_manger][1].air,
             co: res.data.sensorData[camp_manger][1].co,
+            btn: res.data.sensorData[camp_manger][1].btn
           };
-          console.log('서버에서 받아온 값',res.data.sensorData[camp_manger][1].camp_id);
-          console.log('sensorData1에 넣은 값',sensorData1.current.camp_id);
-          sensorData2.current = {
-            camp_id: res.data.sensorData[camp_manger][2].camp_id,
-            deck_num: res.data.sensorData[camp_manger][2].deck_num,
-            temperature: res.data.sensorData[camp_manger][2].temperature,
-            humidity: res.data.sensorData[camp_manger][2].humidity,
-            battery: res.data.sensorData[camp_manger][2].battery,
-            fire1: res.data.sensorData[camp_manger][2].fire_1,
-            fire2: res.data.sensorData[camp_manger][2].fire_2,
-            air: res.data.sensorData[camp_manger][2].air,
-            co: res.data.sensorData[camp_manger][2].co,
-          };
-          sensorData3.current = {
-            camp_id: res.data.sensorData[camp_manger][3].camp_id,
-            deck_num: res.data.sensorData[camp_manger][3].deck_num,
-            temperature: res.data.sensorData[camp_manger][3].temperature,
-            humidity: res.data.sensorData[camp_manger][3].humidity,
-            battery: res.data.sensorData[camp_manger][3].battery,
-            fire1: res.data.sensorData[camp_manger][3].fire_1,
-            fire2: res.data.sensorData[camp_manger][3].fire_2,
-            air: res.data.sensorData[camp_manger][3].air,
-            co: res.data.sensorData[camp_manger][3].co,
-          };
-          sensorData4.current = {
-            camp_id: res.data.sensorData[camp_manger][4].camp_id,
-            deck_num: res.data.sensorData[camp_manger][4].deck_num,
-            temperature: res.data.sensorData[camp_manger][4].temperature,
-            humidity: res.data.sensorData[camp_manger][4].humidity,
-            battery: res.data.sensorData[camp_manger][4].battery,
-            fire1: res.data.sensorData[camp_manger][4].fire_1,
-            fire2: res.data.sensorData[camp_manger][4].fire_2,
-            air: res.data.sensorData[camp_manger][4].air,
-            co: res.data.sensorData[camp_manger][4].co,
-          };
-          sensorData5.current = {
-            camp_id: res.data.sensorData[camp_manger][5].camp_id,
-            deck_num: res.data.sensorData[camp_manger][5].deck_num,
-            temperature: res.data.sensorData[camp_manger][5].temperature,
-            humidity: res.data.sensorData[camp_manger][5].humidity,
-            battery: res.data.sensorData[camp_manger][5].battery,
-            fire1: res.data.sensorData[camp_manger][5].fire_1,
-            fire2: res.data.sensorData[camp_manger][5].fire_2,
-            air: res.data.sensorData[camp_manger][5].air,
-            co: res.data.sensorData[camp_manger][5].co,
-          };
-          sensorData6.current = {
-            camp_id: res.data.sensorData[camp_manger][6].camp_id,
-            deck_num: res.data.sensorData[camp_manger][6].deck_num,
-            temperature: res.data.sensorData[camp_manger][6].temperature,
-            humidity: res.data.sensorData[camp_manger][6].humidity,
-            battery: res.data.sensorData[camp_manger][6].battery,
-            fire1: res.data.sensorData[camp_manger][6].fire_1,
-            fire2: res.data.sensorData[camp_manger][6].fire_2,
-            air: res.data.sensorData[camp_manger][6].air,
-            co: res.data.sensorData[camp_manger][6].co,
-          };
-          */
-
-        // co > 25ppm 이면 위험!!(시간당)
-        if (res.data.sensorData[camp_manger][1].temperature > 22) {
-          if(checkWarning === false){
-            axios.post("/sensor/coWarning", {
-              coWarning: res.data.sensorData[camp_manger][1].co,
+  
+          // co > 25ppm 이면 위험!!(시간당)
+          if (res.data.sensorData[camp_manger][1].co > 73) {
+              // setCheckWarning(true)
+              alert(`주의!! ${res.data.sensorData[camp_manger][1].deck_num}번 데크의 일산화탄소 수치가 너무 높습니다!!`);
+              axios.post("/sensor/coWarning", {
+                coWarning: res.data.sensorData[camp_manger][1].co,
+                mem_id: user.id,
+                deck_id: res.data.sensorData[camp_manger][1].deck_num,
+              });
+            
+          }else{
+            // setCheckWarning(false);
+          }
+          // 공기질 위험알림
+          if (res.data.sensorData[camp_manger][1].air >= 200) {
+            alert(`주의!! ${res.data.sensorData[camp_manger][1].deck_num}번 데크의 유해가스 수치가 너무 높습니다!!`);
+            axios.post("/sensor/airWarning", {
               mem_id: user.id,
               deck_id: res.data.sensorData[camp_manger][1].deck_num,
             });
-            alert("주의!! 일산화탄소 수치가 너무 높습니다. 밖으로 나와주세요!");
-            setCheckWarning(true)
+            return () => clearInterval(getSensorData);
           }
-        }else{
-          setCheckWarning(false);
-        }
-        // 공기질 위험알림
-        if (res.data.sensorData[camp_manger][1].air >= 70) {
-          alert("주의!! 공기질이 너무 안좋습니다. 환기를 시켜주세요!");
-          axios.post("/sensor/airWarning", {
-            mem_id: user.id,
-            deck_id: res.data.sensorData[camp_manger][1].deck_num,
-          });
-          return () => clearInterval(getSensorData);
-        }
-
-        // 화재 위험알림
-        if (
-          res.data.sensorData[camp_manger][1].fire1 >= 240 ||
-          res.data.sensorData[camp_manger][1].fire2 < 1000) 
-          {
-          alert(`주의!! ${res.data.sensorData.deck_num}에서 화재가 감지되었습니다!`);
-          axios.post("/sensor/fireWarning", {
-            mem_id: user.id,
-            deck_id: res.data.sensorData[camp_manger][1].deck_num,
-          });
-          return () => clearInterval(getSensorData);
-        }
-
-        // 배터리 용량에 따른 모양
-        if (res.data.sensorData[camp_manger][1].battery > 420) {
-    // 100%
-    setBatteryStyle({
-      backgroundColor:'green',
-      width:'100%'
-    })
-        } else if (res.data.sensorData[camp_manger][1].battery > 400) {
-    // 75%
-    setBatteryStyle({
-      backgroundColor:'green',
-      width:'75%'
-    })
-        } else if (res.data.sensorData[camp_manger][1].battery > 389) {
-    // 50%
-    setBatteryStyle({
-      backgroundColor:'orange',
-      width:'50%'
-    })
-        } else if (res.data.sensorData[camp_manger][1].battery > 380) {
-    // 25%
-    setBatteryStyle({
-      backgroundColor:'orange',
-      width:'25%'
-    })
-        } else {
-    // 10%
-    setBatteryStyle({
-      backgroundColor:'red',
-      width:'10%'
-    })
-        }   
-
-        //  비상버튼
-        if(res.data.sensorData[camp_manger][res.data.sensorData.deck_num].btn === 1){
-          if(checkBtn == false){
-            alert(`비상비상!! ${res.data.sensorData.deck_num}번 데크에서 비상버튼을 눌렀습니다!!`);
-            setCheckBtn(true);
-            console.log('비상비상!!');
-          }
-        }else{
-          setCheckBtn(false);
-        }
   
-      });
-
-    }, 5000);
-  }
-
-  useEffect(() => {
+          // 화재 위험알림
+          if (
+            res.data.sensorData[camp_manger][1].fire1 >= 240 ||
+            res.data.sensorData[camp_manger][1].fire2 < 1000) 
+            {
+            alert(`주의!! ${res.data.sensorData.deck_num}에서 화재가 감지되었습니다!`);
+            axios.post("/sensor/fireWarning", {
+              mem_id: user.id,
+              deck_id: res.data.sensorData[camp_manger][1].deck_num,
+            });
+            return () => clearInterval(getSensorData);
+          }
+  
+          // 배터리 용량에 따른 모양
+          if (res.data.sensorData[camp_manger][1].battery > 420) {
+      // 100%
+      setBatteryStyle({
+        backgroundColor:'green',
+        width:'100%'
+      })
+          } else if (res.data.sensorData[camp_manger][1].battery > 400) {
+      // 75%
+      setBatteryStyle({
+        backgroundColor:'green',
+        width:'75%'
+      })
+          } else if (res.data.sensorData[camp_manger][1].battery > 389) {
+      // 50%
+      setBatteryStyle({
+        backgroundColor:'orange',
+        width:'50%'
+      })
+          } else if (res.data.sensorData[camp_manger][1].battery > 380) {
+      // 25%
+      setBatteryStyle({
+        backgroundColor:'orange',
+        width:'25%'
+      })
+          } else {
+      // 10%
+      setBatteryStyle({
+        backgroundColor:'red',
+        width:'10%'
+      })
+          }   
+  
+      //  비상버튼
+      if(res.data.sensorData[camp_manger][1].btn == 1){
+          alert(`비상비상!! ${res.data.sensorData[camp_manger][1].deck_num}번 데크에서 비상버튼을 눌렀습니다!!`);
+          console.log('비상비상!!');
+      }
+        })
+        .catch((error)=>{
+          console.log(error);
+        });
+      }, 5000);
+    }
     getSensorData();
-  }, []);
+  }, [sensorData.current])
+
+  // setInterval(() => {
+  //   axios.get('/sensor/btn')
+  // .then((res)=>{
+    
+  // })
+  // }, 1000);
+
+
+
 
   // // 위치정보(경도, 위도) 받아오기 => getCurrentWeather() 실행
   // const getCurrentLocation = () => {
@@ -324,7 +269,7 @@ const MainLive = () => {
           {/* 7행 6열 테이블 */}
           <table style={{ border: "3px solid black", width:'70%'}}>
             {/* 제목 행 */}
-            <tr style={{ border: "1px solid black" }}>
+            <tr style={{ border: "1px solid black", textAlign:'center' }}>
               <th style={{ border: "1px solid black" }}></th>
               <th style={{ border: "1px solid black" }}>일산화탄소</th>
               <th style={{ border: "1px solid black" }}>온 도</th>
@@ -334,47 +279,46 @@ const MainLive = () => {
             </tr>
             <tr style={{ border: "1px solid black" }}>
               <td style={{ border: "1px solid black" }}>데크1</td>
-              {sensorData1.co < 200 ? (
-                <td
+              {sensorData.current.co < 200 
+              ? (<td
                   className="stableGreen"
-                  style={{ border: "1px solid black" }}
-                >
-                  {sensorData1.co}
-                </td>
-              ) : sensorData1.co < 300 ? (
-                <td
+                  style={{ border: "1px solid black" }}>
+                  {sensorData.current.co}
+                </td>) 
+                : sensorData.current.co < 300 
+                ? (<td
                   className="warningOrange"
                   style={{ border: "1px solid black" }}
                 >
-                  {sensorData1.co}
+                  {sensorData.current.co}
                 </td>
               ) : (
                 <td
                   className="warningRed"
                   style={{ border: "1px solid black" }}
                 >
-                  {sensorData1.co}
+                  {sensorData.current.co}
                 </td>
               )}
               <td style={{ border: "1px solid black" }}>
-                {sensorData1.temperature}
+                {sensorData.current.temperature}
               </td>
               <td style={{ border: "1px solid black" }}>
-                {sensorData1.humidity}
+                {sensorData.current.humidity}
               </td>
-              {sensorData1.air < 70 ? (
+              {sensorData.current.air < 70 ? (
                 <td
                   className="stableGreen"
                   style={{ border: "1px solid black" }}
                 >
-                  {sensorData1.air}
+                  {sensorData.current.air}
                 </td>
               ) : (
                 <td
                   className="warningRed"
                   style={{ border: "1px solid black" }}
                 >
-                  {sensorData1.air}
+                  {sensorData.current.air}
                 </td>
               )}
               <td style={{ border: "1px solid black" }}>
@@ -391,8 +335,8 @@ const MainLive = () => {
                 style={{ border: "1px solid black" }}>
                 120
               </td>
-              <td>23</td>
-              <td>13</td>
+              <td style={{ border: "1px solid black" }}>23</td>
+              <td style={{ border: "1px solid black" }}>13</td>
               <td
               className="stableGreen"
               style={{ border: "1px solid black" }}>
@@ -410,8 +354,8 @@ const MainLive = () => {
                 style={{ border: "1px solid black" }}>
                 120
               </td>
-              <td>23</td>
-              <td>13</td>
+              <td style={{ border: "1px solid black" }}>23</td>
+              <td style={{ border: "1px solid black" }}>13</td>
               <td
               className="stableGreen"
               style={{ border: "1px solid black" }}>
@@ -429,8 +373,8 @@ const MainLive = () => {
                 style={{ border: "1px solid black" }}>
                 120
               </td>
-              <td>23</td>
-              <td>13</td>
+              <td style={{ border: "1px solid black" }}>23</td>
+              <td style={{ border: "1px solid black" }}>13</td>
               <td
               className="stableGreen"
               style={{ border: "1px solid black" }}>
@@ -448,8 +392,8 @@ const MainLive = () => {
                 style={{ border: "1px solid black" }}>
                 120
               </td>
-              <td>23</td>
-              <td>13</td>
+              <td style={{ border: "1px solid black" }}>23</td>
+              <td style={{ border: "1px solid black" }}>13</td>
               <td
               className="stableGreen"
               style={{ border: "1px solid black" }}>
@@ -467,8 +411,8 @@ const MainLive = () => {
                 style={{ border: "1px solid black" }}>
                 120
               </td>
-              <td>23</td>
-              <td>13</td>
+              <td style={{ border: "1px solid black" }}>23</td>
+              <td style={{ border: "1px solid black" }}>13</td>
               <td
               className="stableGreen"
               style={{ border: "1px solid black" }}>

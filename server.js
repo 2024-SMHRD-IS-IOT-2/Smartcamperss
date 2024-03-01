@@ -78,7 +78,8 @@ io.on('connection', (socket) => {
           fire_1 : data.fire_1,
           fire_2 : data.fire_2,
           air : data.Air,
-          co : data.Co
+          co : data.Co,
+          btn : data.Btn
       };
 
     console.log(sensorData);
@@ -101,6 +102,5 @@ io.on('connection', (socket) => {
   
   server.listen(app.get('port'), () => {
     console.log(`Server running on port ${app.get('port')}`);
-    console.log('server is fine')
   });
   
