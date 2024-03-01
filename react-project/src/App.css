@@ -13,6 +13,7 @@ img{
   background-size: cover;
   background-repeat: no-repeat;
   height: 100vh;
+  overflow: auto;
 }
 
 /* Header.jsx */

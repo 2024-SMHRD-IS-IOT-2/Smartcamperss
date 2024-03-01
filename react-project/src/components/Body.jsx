@@ -12,7 +12,7 @@ import LcdLayout from './LcdLayout'
 import Join from './Join';
 import MyPage from './MyPage';
 import '../App.css';
-import DBManage from './DBmanage';
+import DBManage from './DBManage';
 
 
 const Body = () => {

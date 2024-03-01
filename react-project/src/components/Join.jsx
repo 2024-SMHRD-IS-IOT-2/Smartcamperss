@@ -56,7 +56,7 @@ const Join = () => {
                     camptel: camptelRef.current.value,
                 }).then((res) => {
                     console.log('요청성공', res.data);
-                    window.alert('회원가입 완료!');
+                    window.alert('⛺SavetheCampers 가입을 축하합니다⛺');
                     window.location.href = '/';
                 });
             }
@@ -67,7 +67,7 @@ const Join = () => {
         <Container>
             <Row className="justify-content-center">
                 <Col md={6}>
-                  <h6 className="centered-text">안녕하세요 스마트캠퍼즈 입니다 회원정보를 입력해주세요</h6>
+                  <h6 className="text-center" style={{ color: "white" }}>안녕하세요 스마트캠퍼즈 입니다 회원정보를 입력해주세요</h6>
                     <hr />
                     <Form onSubmit={handleJoin}>
                         <Form.Group controlId="formBasicId">
@@ -90,7 +90,8 @@ const Join = () => {
                             <Form.Control type="password" placeholder="비밀번호 확인" ref={pw2Ref} style={{ width: '500px' }} />
                         </Form.Group>
 
-                        <span>※ 비밀번호가 일치하지 않습니다.</span>
+                        
+                        <span className="text-center" style={{ color: "white" }}>※ 비밀번호가 일치하지 않습니다.</span>
 
                         <Form.Group controlId="formBasicName">
                             <Form.Label> </Form.Label>

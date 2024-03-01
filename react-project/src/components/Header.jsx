@@ -36,8 +36,8 @@ const Header = () => {
   const renderButtons = user && location.pathname !== '/' ? (
     [
       { name: '실시간 관리 페이지', value: '1', to:'/mainlive' },
-      { name: 'DB 관리 페이지', value: '2', to:'/dbmanage' },
-      { name: '알림 페이지', value: '3', to:'/notice' },
+      { name: '알림 페이지', value: '2', to:'/notice' },
+      { name: '데이터 관리 페이지', value: '3', to:'/dbmanage' },
       { name: '마이페이지', value: '4', to:'/mypage' }, //
       { name: '로그 아웃', value: '5', onClick: handleLogout },
     ]
@@ -48,7 +48,9 @@ const Header = () => {
 
   return (
     <div>
-      <h1 className="text-center mb-4" style={{ fontFamily: 'JalnanGothic', color: '#ffb300', paddingTop:'15px' }}>SaveTheCampers</h1>
+      <br/>
+      <h1 className="text-center mb-4" style={{ fontFamily: 'JalnanGothic', color: '#ffb300', paddingTop:'15px' }}>SavetheCampers</h1>
+      <br/>
       <div style={{width:'100px'}}></div>
       <ButtonGroup style={style.buttons}>
         {renderButtons && renderButtons.map((radio, idx) => (

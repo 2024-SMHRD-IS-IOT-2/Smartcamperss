@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Button, Table } from "react-bootstrap";
 import axios from "../axios";
+import Footer from "./Footer";
 
 const DBManage = () => {
   let user = JSON.parse(sessionStorage.getItem("user")) || null;
@@ -165,11 +166,13 @@ const handleButtonClick_gas = () => {
       
       <br/>
       <br/>
-      <h6 className="text-center">메세지 내역 관리 - 회원에게 발송한 메세지내역을 확인 할 수 있습니다 </h6>
+      <br/>
+      <h6 className="text-center" style={{ color: "white" }}>데이터 관리페이지 - 회원분들께 발송한 데이터 내용을 확인 할 수 있습니다 </h6>
+      <br/>
       <br/>
 
       <div>{/*=====메세지내역=====*/}
-        <h4 style={{ textAlign: "center" }} >메세지내역</h4>
+        <h4 style={{ textAlign: "center", color: "white" }} >메세지내역</h4>
         <div style={{ textAlign: "center" }}>
           <Button onClick={handleButtonClick} variant="success">
             {isLoaded ? "메세지내역 불러오기" : "메세지내역 불러오기"}
@@ -204,10 +207,10 @@ const handleButtonClick_gas = () => {
       <br/>            
 
       <div>{/*=====일산화탄소 경고 메세지 ======*/}
-      <h4 style={{ textAlign: "center" }} >일산화탄소 경고메세지</h4>
+      <h4 style={{ textAlign: "center", color: "white" }} >일산화탄소 경고메세지</h4>
         <div style={{ textAlign: "center" }}>
           <Button onClick={handleButtonClick_co} variant="success">
-            {isLoaded_co ? "일산화탄소 경고 메세지 내역 불러오기" : "일산화탄소 경고 메세지 내역 불러오기"}
+            {isLoaded_co ? "일산화탄소 경고메세지 내역 불러오기" : "일산화탄소 경고메세지 내역 불러오기"}
           </Button>
         </div>
         {isLoaded_co && (
@@ -240,10 +243,10 @@ const handleButtonClick_gas = () => {
 
 
       <div>{/*=====불꽃 경고 메세지===== */}
-      <h4 style={{ textAlign: "center" }}>불꽃 경고메세지</h4>
+      <h4 style={{ textAlign: "center", color: "white" }} >화재 경고메세지</h4>
         <div style={{ textAlign: "center" }}>
           <Button onClick={handleButtonClick_flame} variant="success">
-            {isLoaded_flame ? "불꽃 경고메세지 내역 불러오기" : "불꽃 경고메세지 내역 불러오기"}
+            {isLoaded_flame ? "화재 경고메세지 내역 불러오기" : "화재 경고메세지 내역 불러오기"}
           </Button>
         </div>
         {isLoaded_flame && (
@@ -275,10 +278,10 @@ const handleButtonClick_gas = () => {
 
       <div>{/*=====가스 경고 메세지===== */}
 
-      <h4 style={{ textAlign: "center" }}>가스 경고메세지</h4>
+      <h4 style={{ textAlign: "center", color: "white" }} >유해가스 경고메세지</h4>
         <div style={{ textAlign: "center" }}>
           <Button onClick={handleButtonClick_gas} variant="success">
-            {isLoaded_gas ? "가스 경고메세지 내역 불러오기" : "가스 경고메세지 내역 불러오기"}
+            {isLoaded_gas ? "유해가스 경고메세지 내역 불러오기" : "유해가스 경고메세지 내역 불러오기"}
           </Button>
         </div>
         {isLoaded_gas && (
@@ -304,6 +307,10 @@ const handleButtonClick_gas = () => {
         {!isLoaded_gas && <p> </p>}  
       
       </div>{/*=====끝 가스 경고 메세지===== */}
+      <br/>
+      <br/>
+      
+      <Footer/>
     </div>
   );
 };

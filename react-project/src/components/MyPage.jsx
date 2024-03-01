@@ -74,7 +74,9 @@ const MyPage = () => {
     <div className="main-body">
       <br/>
       <br/>
-      <h6 className="text-center">개인정보관리 - 소중한 내 정보를 최신으로 관리하세요</h6>
+      <br/>
+
+      <h6 className="text-center" style={{ color: "white" }}>개인정보관리 - 소중한 내 정보를 최신으로 관리하세요</h6>
       <br/>
       <div align="center">
         <Table striped="columns" style={{ maxWidth: '600px', margin: 'auto' }}>
@@ -164,7 +166,9 @@ const MyPage = () => {
           </Button>
         </Modal.Footer>
       </Modal>
-
+      <br/>
+      <br/>
+      <br/>
       <Footer/>
     </div>
   );
