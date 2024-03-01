@@ -21,9 +21,9 @@ const Join = () => {
     const checkId = () => {
         axios.post('/user/checkId', { id: idRef.current.value }).then((res) => {
             if (res.data.result === 'dup') {
-                setText('※ 사용 불가능한 아이디입니다. 다른 아이디를 입력해주세요.');
+                setText(<span style={{ color: 'orange' }}>※ 사용 불가능한 아이디입니다. 다른 아이디를 입력해주세요.</span>);
             } else {
-                setText('※ 사용 가능한 아이디입니다.');
+                setText(<span style={{ color: 'white' }}>※ 사용 가능한 아이디입니다.</span>);
             }
         });
     };
@@ -67,8 +67,8 @@ const Join = () => {
         <Container>
             <Row className="justify-content-center">
                 <Col md={6}>
-                  <h6 className="text-center" style={{ color: "white" }}>안녕하세요 스마트캠퍼즈 입니다 회원정보를 입력해주세요</h6>
-                    <hr />
+                  <h6 className="text-center" style={{ color: "green" }}>세이브더캠퍼즈 입니다 회원정보를 입력해주세요</h6>
+                    
                     <Form onSubmit={handleJoin}>
                         <Form.Group controlId="formBasicId">
                             <Form.Label> </Form.Label>
@@ -126,6 +126,8 @@ const Join = () => {
 
                         <div className="d-grid mb-3">
                             <Button variant="success" type="submit" style={{ width: '500px' }}>회원가입</Button>
+                            <br/>
+                            <br/>
                         </div>
                     </Form>
                 </Col>

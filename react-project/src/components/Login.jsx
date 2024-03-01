@@ -57,7 +57,7 @@ const Login = () => {
         </div>
       </Form>
       {/* 회원가입 링크 추가 */}
-      <p className="text-center" style={{color:'white'}}>계정이 없으신가요? <Link to="/join" style={{ color: '#87CEEB' }}>회원가입</Link></p>
+      <p className="text-center" style={{color:'white'}}>계정이 없으신가요? <Link to="/join" style={{ color: '#eb8e31' }}>회원가입</Link></p>
     </Container>
   );
 };
