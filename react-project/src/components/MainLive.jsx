@@ -29,6 +29,7 @@ const MainLive = () => {
     fire_2: 0,
     air: 0,
     co: 0,
+    btn:0
   });
   let sensorData2 = useRef({});
   let sensorData3 = useRef({});
@@ -45,7 +46,7 @@ const MainLive = () => {
   let month = today.getMonth() + 1; // 월
   let date = today.getDate(); // 날짜
 
-  //임시 관리자 값 부여
+  // 관리자 값 부여
   let camp_manger = user.id;
 
   // 모달창 열고닫는 boolean
@@ -80,6 +81,11 @@ const MainLive = () => {
     backgroundColor:'orange',
     width:'50%'
   });
+
+  // 버튼 중복 막는 boolean
+  const [checkBtn, setCheckBtn] = useState(false);
+  // 알림창 중복띄우는걸 막는 boolean
+  const [checkWarning, setCheckWarning] = useState(false);
   
 
   // setInterval 꼭 써야하나? useEffect때문에 ref가 바뀌면 당연히 axios 다시 실행될텐데
@@ -97,6 +103,7 @@ const MainLive = () => {
           fire2: res.data.sensorData[camp_manger][1].fire_2,
           air: res.data.sensorData[camp_manger][1].air,
           co: res.data.sensorData[camp_manger][1].co,
+          btn: res.data.sensorData[camp_manger][1].btn
         });
 
         /*
@@ -171,19 +178,18 @@ const MainLive = () => {
           */
 
         // co > 25ppm 이면 위험!!(시간당)
-        if (res.data.sensorData[camp_manger][1].co > 300) {
-          alert("주의!! 일산화탄소 수치가 너무 높습니다. 밖으로 나와주세요!");
-          axios.post("/sensor/coWarning", {
-            coWarning: res.data.sensorData[camp_manger][1].co,
-            mem_id: user.id,
-            deck_id: res.data.sensorData[camp_manger][1].deck_num,
-          });
-          clearInterval(getSensorData);
-          console.log("잠시 멈춤");
-          setTimeout(() => {
-            getSensorData();
-          }, 10000);
-          console.log("다시 시작");
+        if (res.data.sensorData[camp_manger][1].temperature > 22) {
+          if(checkWarning === false){
+            axios.post("/sensor/coWarning", {
+              coWarning: res.data.sensorData[camp_manger][1].co,
+              mem_id: user.id,
+              deck_id: res.data.sensorData[camp_manger][1].deck_num,
+            });
+            alert("주의!! 일산화탄소 수치가 너무 높습니다. 밖으로 나와주세요!");
+            setCheckWarning(true)
+          }
+        }else{
+          setCheckWarning(false);
         }
         // 공기질 위험알림
         if (res.data.sensorData[camp_manger][1].air >= 70) {
@@ -194,12 +200,13 @@ const MainLive = () => {
           });
           return () => clearInterval(getSensorData);
         }
+
         // 화재 위험알림
         if (
           res.data.sensorData[camp_manger][1].fire1 >= 240 ||
-          res.data.sensorData[camp_manger][1].fire2 < 1000
-        ) {
-          alert("주의!! 화재가 감지되었습니다. 어서 대피하세요!");
+          res.data.sensorData[camp_manger][1].fire2 < 1000) 
+          {
+          alert(`주의!! ${res.data.sensorData.deck_num}에서 화재가 감지되었습니다!`);
           axios.post("/sensor/fireWarning", {
             mem_id: user.id,
             deck_id: res.data.sensorData[camp_manger][1].deck_num,
@@ -207,39 +214,52 @@ const MainLive = () => {
           return () => clearInterval(getSensorData);
         }
 
-  // 배터리 용량에 따른 모양
-  if (res.data.sensorData[camp_manger][1].battery > 420) {
+        // 배터리 용량에 따른 모양
+        if (res.data.sensorData[camp_manger][1].battery > 420) {
     // 100%
     setBatteryStyle({
       backgroundColor:'green',
       width:'100%'
     })
-  } else if (res.data.sensorData[camp_manger][1].battery > 400) {
+        } else if (res.data.sensorData[camp_manger][1].battery > 400) {
     // 75%
     setBatteryStyle({
       backgroundColor:'green',
       width:'75%'
     })
-  } else if (res.data.sensorData[camp_manger][1].battery > 389) {
+        } else if (res.data.sensorData[camp_manger][1].battery > 389) {
     // 50%
     setBatteryStyle({
       backgroundColor:'orange',
       width:'50%'
     })
-  } else if (res.data.sensorData[camp_manger][1].battery > 380) {
+        } else if (res.data.sensorData[camp_manger][1].battery > 380) {
     // 25%
     setBatteryStyle({
       backgroundColor:'orange',
       width:'25%'
     })
-  } else {
+        } else {
     // 10%
     setBatteryStyle({
       backgroundColor:'red',
       width:'10%'
     })
-  }   
+        }   
+
+        //  비상버튼
+        if(res.data.sensorData[camp_manger][res.data.sensorData.deck_num].btn === 1){
+          if(checkBtn == false){
+            alert(`비상비상!! ${res.data.sensorData.deck_num}번 데크에서 비상버튼을 눌렀습니다!!`);
+            setCheckBtn(true);
+            console.log('비상비상!!');
+          }
+        }else{
+          setCheckBtn(false);
+        }
+  
       });
+
     }, 5000);
   }
 
@@ -298,11 +318,11 @@ const MainLive = () => {
   return (
     <div>
       {/* 가로 배열 */}
-      <div>
+      <div style={{display:'flex', justifyContent:'space-evenly', margin:'80px 0px 0px 0px'}}>
         {/* 센서값 데이터 테이블 */}
         
           {/* 7행 6열 테이블 */}
-          <table style={{ border: "3px solid black", marginLeft:'5%', marginBottom:'10px', width:'90%'}}>
+          <table style={{ border: "3px solid black", width:'70%'}}>
             {/* 제목 행 */}
             <tr style={{ border: "1px solid black" }}>
               <th style={{ border: "1px solid black" }}></th>
@@ -467,6 +487,7 @@ const MainLive = () => {
           className="totalClimate"
           style={{ color: "#ffb300", fontWeight: "900" }}
         >
+          <div style={{marginBottom:'30px', textAlign:'center'}}>
           <p>{today.toLocaleString()}</p>
           <div className="climateinfo">
             <div
@@ -502,6 +523,7 @@ const MainLive = () => {
               일기 예보
             </Button>
           )}
+          </div>
           <br />
           <div style={{display:'flex'}}>
             <div style={{display:'flex', flexDirection:'column', marginRight:'20px'}}>
@@ -574,7 +596,9 @@ const MainLive = () => {
         </div>
       </div>
 
+      <div style={{position:'fixed', bottom:'0', width:'100%'}}>
       <Footer/>
+      </div>
     </div>
   );
 };

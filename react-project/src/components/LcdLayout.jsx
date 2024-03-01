@@ -77,7 +77,7 @@ const LcdLayout = () => {
 
 
   return (
-    <div>
+    <div style={{margin:'0', padding:'0'}}>
         {/* 날씨API 띄우기 */}
         <div className="totalClimate" style={{color:'white', fontWeight:'900'}}>
           <p>{today.toLocaleString()}</p>
@@ -133,7 +133,9 @@ const LcdLayout = () => {
             </ul>
         </div>
 
+        <div style={{position:'fixed', bottom:'0', width:'100%'}}>
         <Footer/>
+        </div>
     </div>
   )
 }

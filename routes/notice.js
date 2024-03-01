@@ -2,14 +2,31 @@ const express = require("express");
 const noticeRouter = express.Router();
 const conn = require("../config/database");
 
-const decks = {
-  1: [],
-  2: [],
-  3: [],
-  4: [],
-  5: [],
-  6: [],
-};
+let userId;
+let decks={};
+noticeRouter.post('/userId', (req, res)=>{
+  userId = req.body;
+  console.log('유저아이디!!!!!',userId);
+  
+  // DB에서 회원에 따른 데크넘버 가져오기
+  const deckSql = `select deck_num from tb_deck where mem_id = '${userId.id}'`;
+  conn.query(deckSql, (err, rows)=>{
+    if (err) {
+      console.error("데이터 가져오기 실패~~~:", err);
+      return;
+    } else {
+      // console.log('로우들', rows);
+      // rows.map((item)=>{
+      //   decks[item.deck_num] = []
+      // })
+      for(let i=0; i<rows.length+1; i++){
+        decks[i] = []
+      }
+      console.log('데크들!!!', decks);
+    }
+  })
+})
+
 
 // 한개의 데크에게만 메세지를 보냄
 noticeRouter.post("/sendMessage", (req, res) => {
