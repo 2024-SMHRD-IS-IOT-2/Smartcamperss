@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import ToggleButton from 'react-bootstrap/ToggleButton';
 import { Link, useLocation } from 'react-router-dom';
-import campers from '../images/campers.png';
+import '../App.css';
 
 const Header = () => {
   const style = {
@@ -47,8 +47,8 @@ const Header = () => {
   if (location.pathname === '/') return null;
 
   return (
-    <div style={style.buttons}>
-      <img src={campers} alt="" style={{width:'50px', height:'50px', marginTop:'10px'}}/>
+    <div>
+      <h1 className="text-center mb-4" style={{ fontFamily: 'JalnanGothic', color: '#ffb300', paddingTop:'15px' }}>SaveTheCampers</h1>
       <div style={{width:'100px'}}></div>
       <ButtonGroup style={style.buttons}>
         {renderButtons && renderButtons.map((radio, idx) => (

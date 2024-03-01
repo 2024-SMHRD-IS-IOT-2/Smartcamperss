@@ -6,6 +6,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react'
 import { ClimateContext } from '../context/ClimateContext';
 import { useParams } from 'react-router-dom';
 import axios from '../axios';
+import Footer from './Footer';
 
 const LcdLayout = () => {
 
@@ -78,7 +79,7 @@ const LcdLayout = () => {
   return (
     <div>
         {/* 날씨API 띄우기 */}
-        <div className="totalClimate" style={{color:'black', fontWeight:'900'}}>
+        <div className="totalClimate" style={{color:'white', fontWeight:'900'}}>
           <p>{today.toLocaleString()}</p>
           <div className="climateinfo">
           <div style={{backgroundColor:'lightblue', marginRight:'20px', borderRadius:"50%", width:'150px', height:'150px'}}>
@@ -131,6 +132,8 @@ const LcdLayout = () => {
               ))}
             </ul>
         </div>
+
+        <Footer/>
     </div>
   )
 }

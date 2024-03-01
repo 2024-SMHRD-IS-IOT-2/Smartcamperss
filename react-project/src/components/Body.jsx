@@ -11,11 +11,12 @@ import { Route, Routes } from 'react-router-dom';
 import LcdLayout from './LcdLayout'
 import Join from './Join';
 import MyPage from './MyPage';
+import '../App.css';
 
 
 const Body = () => {
   return (
-    <div className="backgroundHong">
+    <div className="backgroundHong" style={{fontFamily: 'JalnanGothic'}}>
         {/* Header는 로그인이 될 때 띄우도록 하면 로그인 페이지에서 안보이게 할 수 있음 */}
         <Header/>
 
@@ -27,8 +28,7 @@ const Body = () => {
           <Route path='/mainlive' element={<MainLive/>}/>
           <Route path='/notice' element={<Notice/>}/>
           <Route path='/lcd/:decknum' element={<LcdLayout/>}/>
-        </Routes>
-          
+        </Routes>          
     </div>
   )
 }

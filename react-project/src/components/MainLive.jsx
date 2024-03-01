@@ -12,6 +12,7 @@ import "../App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { ClimateContext } from "../context/ClimateContext";
 import { useNavigate } from "react-router-dom";
+import Footer from "./Footer";
 
 const MainLive = () => {
   const user = JSON.parse(sessionStorage.getItem("user")); //세션
@@ -75,25 +76,30 @@ const MainLive = () => {
     navigate(`/lcd/6`);
   };
 
+  const [batteryStyle, setBatteryStyle] = useState({
+    backgroundColor:'orange',
+    width:'50%'
+  });
+  
 
-    // setInterval 꼭 써야하나? useEffect때문에 ref가 바뀌면 당연히 axios 다시 실행될텐데
-    function getSensorData(){
-      setInterval(() => {
-        axios.post("/sensor/data", { id: "hi" }).then((res) => {
-          // console.log('데이터', res.data.sensorData[camp_manger].deck_num);
-          setSensorData1({
-            camp_id: res.data.sensorData[camp_manger][1].camp_id,
-            deck_num: res.data.sensorData[camp_manger][1].deck_num,
-            temperature: res.data.sensorData[camp_manger][1].temperature,
-            humidity: res.data.sensorData[camp_manger][1].humidity,
-            battery: res.data.sensorData[camp_manger][1].battery,
-            fire1: res.data.sensorData[camp_manger][1].fire_1,
-            fire2: res.data.sensorData[camp_manger][1].fire_2,
-            air: res.data.sensorData[camp_manger][1].air,
-            co: res.data.sensorData[camp_manger][1].co,
-          })
+  // setInterval 꼭 써야하나? useEffect때문에 ref가 바뀌면 당연히 axios 다시 실행될텐데
+  function getSensorData() {
+    setInterval(() => {
+      axios.post("/sensor/data", { id: "hi" }).then((res) => {
+        // console.log('데이터', res.data.sensorData[camp_manger].deck_num);
+        setSensorData1({
+          camp_id: res.data.sensorData[camp_manger][1].camp_id,
+          deck_num: res.data.sensorData[camp_manger][1].deck_num,
+          temperature: res.data.sensorData[camp_manger][1].temperature,
+          humidity: res.data.sensorData[camp_manger][1].humidity,
+          battery: res.data.sensorData[camp_manger][1].battery,
+          fire1: res.data.sensorData[camp_manger][1].fire_1,
+          fire2: res.data.sensorData[camp_manger][1].fire_2,
+          air: res.data.sensorData[camp_manger][1].air,
+          co: res.data.sensorData[camp_manger][1].co,
+        });
 
-          /*
+        /*
           sensorData1.current = {
             camp_id: res.data.sensorData[camp_manger][1].camp_id,
             deck_num: res.data.sensorData[camp_manger][1].deck_num,
@@ -163,24 +169,83 @@ const MainLive = () => {
             co: res.data.sensorData[camp_manger][6].co,
           };
           */
-          
-          // co > 25ppm 이면 위험!!(시간당)
-          if (res.data.sensorData[camp_manger][1].co > 73 
-            || res.data.sensorData[camp_manger][1].air >= 70 
-            || res.data.sensorData[camp_manger][1].fire1 >=240
-            || res.data.sensorData[camp_manger][1].fire2 < 1000) {
-            alert("위험이 감지되었습니다!!!");
-            return ()=> clearInterval(getSensorData);
-          }
-        });
-      }, 5000);
-    }
 
-    useEffect(()=>{
-      getSensorData();
-    },[])
-    
+        // co > 25ppm 이면 위험!!(시간당)
+        if (res.data.sensorData[camp_manger][1].co > 300) {
+          alert("주의!! 일산화탄소 수치가 너무 높습니다. 밖으로 나와주세요!");
+          axios.post("/sensor/coWarning", {
+            coWarning: res.data.sensorData[camp_manger][1].co,
+            mem_id: user.id,
+            deck_id: res.data.sensorData[camp_manger][1].deck_num,
+          });
+          clearInterval(getSensorData);
+          console.log("잠시 멈춤");
+          setTimeout(() => {
+            getSensorData();
+          }, 10000);
+          console.log("다시 시작");
+        }
+        // 공기질 위험알림
+        if (res.data.sensorData[camp_manger][1].air >= 70) {
+          alert("주의!! 공기질이 너무 안좋습니다. 환기를 시켜주세요!");
+          axios.post("/sensor/airWarning", {
+            mem_id: user.id,
+            deck_id: res.data.sensorData[camp_manger][1].deck_num,
+          });
+          return () => clearInterval(getSensorData);
+        }
+        // 화재 위험알림
+        if (
+          res.data.sensorData[camp_manger][1].fire1 >= 240 ||
+          res.data.sensorData[camp_manger][1].fire2 < 1000
+        ) {
+          alert("주의!! 화재가 감지되었습니다. 어서 대피하세요!");
+          axios.post("/sensor/fireWarning", {
+            mem_id: user.id,
+            deck_id: res.data.sensorData[camp_manger][1].deck_num,
+          });
+          return () => clearInterval(getSensorData);
+        }
 
+  // 배터리 용량에 따른 모양
+  if (res.data.sensorData[camp_manger][1].battery > 420) {
+    // 100%
+    setBatteryStyle({
+      backgroundColor:'green',
+      width:'100%'
+    })
+  } else if (res.data.sensorData[camp_manger][1].battery > 400) {
+    // 75%
+    setBatteryStyle({
+      backgroundColor:'green',
+      width:'75%'
+    })
+  } else if (res.data.sensorData[camp_manger][1].battery > 389) {
+    // 50%
+    setBatteryStyle({
+      backgroundColor:'orange',
+      width:'50%'
+    })
+  } else if (res.data.sensorData[camp_manger][1].battery > 380) {
+    // 25%
+    setBatteryStyle({
+      backgroundColor:'orange',
+      width:'25%'
+    })
+  } else {
+    // 10%
+    setBatteryStyle({
+      backgroundColor:'red',
+      width:'10%'
+    })
+  }   
+      });
+    }, 5000);
+  }
+
+  useEffect(() => {
+    getSensorData();
+  }, []);
 
   // // 위치정보(경도, 위도) 받아오기 => getCurrentWeather() 실행
   // const getCurrentLocation = () => {
@@ -202,19 +267,19 @@ const MainLive = () => {
   // };
 
   // 5일간 일기예보(response.data) 받아오기
-    // const getForecast5days = async () => {
-    //   try {
-    //       const API_KEY = process.env.REACT_APP_FORECAST_KEY;
-    //       let weather_url = `https://apihub.kma.go.kr/api/typ01/url/kma_sfcdd.php?tm=20150715&stn=0&help=1&authKey=${API_KEY}`;
+  // const getForecast5days = async () => {
+  //   try {
+  //       const API_KEY = process.env.REACT_APP_FORECAST_KEY;
+  //       let weather_url = `https://apihub.kma.go.kr/api/typ01/url/kma_sfcdd.php?tm=20150715&stn=0&help=1&authKey=${API_KEY}`;
 
-    //       let response = await axios.get(weather_url);
-    //       setForecast5days(response.data);
-    //       console.log('haha',response.data);
-    //       console.log("기상예보 :", forecast5days);
-    //   } catch (error) {
-    //       console.error('5일 예보 데이터 가져오기 실패:', error.message);
-    //   }
-    // };
+  //       let response = await axios.get(weather_url);
+  //       setForecast5days(response.data);
+  //       console.log('haha',response.data);
+  //       console.log("기상예보 :", forecast5days);
+  //   } catch (error) {
+  //       console.error('5일 예보 데이터 가져오기 실패:', error.message);
+  //   }
+  // };
   // // mounting 될 때, 날씨 띄우기
   // useEffect(() => {
   //   // eslint-disable-next-line
@@ -235,9 +300,9 @@ const MainLive = () => {
       {/* 가로 배열 */}
       <div>
         {/* 센서값 데이터 테이블 */}
-        <div>
+        
           {/* 7행 6열 테이블 */}
-          <table className="table" style={{ border: "3px solid black" }}>
+          <table style={{ border: "3px solid black", marginLeft:'5%', marginBottom:'10px', width:'90%'}}>
             {/* 제목 행 */}
             <tr style={{ border: "1px solid black" }}>
               <th style={{ border: "1px solid black" }}></th>
@@ -249,14 +314,14 @@ const MainLive = () => {
             </tr>
             <tr style={{ border: "1px solid black" }}>
               <td style={{ border: "1px solid black" }}>데크1</td>
-              {sensorData1.co < 60 ? (
+              {sensorData1.co < 200 ? (
                 <td
                   className="stableGreen"
                   style={{ border: "1px solid black" }}
                 >
                   {sensorData1.co}
                 </td>
-              ) : sensorData1.co < 73 ? (
+              ) : sensorData1.co < 300 ? (
                 <td
                   className="warningOrange"
                   style={{ border: "1px solid black" }}
@@ -292,18 +357,115 @@ const MainLive = () => {
                   {sensorData1.air}
                 </td>
               )}
-
               <td style={{ border: "1px solid black" }}>
-                {sensorData1.battery}
+                {/* {res.data.sensorData[camp_manger][1].battery} */}
+                <div
+                  style={batteryStyle}
+                ></div>
               </td>
             </tr>
+            <tr style={{ border: "1px solid black" }}>
+              <td style={{ border: "1px solid black" }}>데크2</td>
+              <td 
+                className="stableGreen"
+                style={{ border: "1px solid black" }}>
+                120
+              </td>
+              <td>23</td>
+              <td>13</td>
+              <td
+              className="stableGreen"
+              style={{ border: "1px solid black" }}>
+                25</td>
+              <td>
+              <div
+                  style={{width:'80%', backgroundColor:'green'}}
+                ></div>
+              </td>
+            </tr>
+            <tr style={{ border: "1px solid black" }}>
+              <td style={{ border: "1px solid black" }}>데크3</td>
+              <td 
+                className="stableGreen"
+                style={{ border: "1px solid black" }}>
+                120
+              </td>
+              <td>23</td>
+              <td>13</td>
+              <td
+              className="stableGreen"
+              style={{ border: "1px solid black" }}>
+                25</td>
+              <td>
+              <div
+                  style={{width:'50%', backgroundColor:'orange'}}
+                ></div>
+              </td>
+            </tr>
+            <tr style={{ border: "1px solid black" }}>
+              <td style={{ border: "1px solid black" }}>데크4</td>
+              <td 
+                className="stableGreen"
+                style={{ border: "1px solid black" }}>
+                120
+              </td>
+              <td>23</td>
+              <td>13</td>
+              <td
+              className="stableGreen"
+              style={{ border: "1px solid black" }}>
+                25</td>
+              <td>
+              <div
+                  style={{width:'25%', backgroundColor:'red'}}
+                ></div>
+              </td>
+            </tr>
+            <tr style={{ border: "1px solid black" }}>
+              <td style={{ border: "1px solid black" }}>데크5</td>
+              <td 
+                className="stableGreen"
+                style={{ border: "1px solid black" }}>
+                120
+              </td>
+              <td>23</td>
+              <td>13</td>
+              <td
+              className="stableGreen"
+              style={{ border: "1px solid black" }}>
+                25</td>
+              <td>
+              <div
+                  style={{width:'10%', backgroundColor:'red'}}
+                ></div>
+              </td>
+            </tr>
+            <tr style={{ border: "1px solid black" }}>
+              <td style={{ border: "1px solid black" }}>데크6</td>
+              <td 
+                className="stableGreen"
+                style={{ border: "1px solid black" }}>
+                120
+              </td>
+              <td>23</td>
+              <td>13</td>
+              <td
+              className="stableGreen"
+              style={{ border: "1px solid black" }}>
+                25</td>
+              <td>
+              <div
+                  style={{width:'100%', backgroundColor:'green'}}
+                ></div>
+              </td>
+            </tr>
+            
           </table>
-        </div>
 
         {/* 날씨API 띄우기 */}
         <div
           className="totalClimate"
-          style={{ color: "black", fontWeight: "900" }}
+          style={{ color: "#ffb300", fontWeight: "900" }}
         >
           <p>{today.toLocaleString()}</p>
           <div className="climateinfo">
@@ -340,12 +502,21 @@ const MainLive = () => {
               일기 예보
             </Button>
           )}
-          <button onClick={goToLCDPage_1}>Deck_1</button>
-          <button onClick={goToLCDPage_2}>Deck_2</button>
-          <button onClick={goToLCDPage_3}>Deck_3</button>
-          <button onClick={goToLCDPage_4}>Deck_4</button>
-          <button onClick={goToLCDPage_5}>Deck_5</button>
-          <button onClick={goToLCDPage_6}>Deck_6</button>
+          <br />
+          <div style={{display:'flex'}}>
+            <div style={{display:'flex', flexDirection:'column', marginRight:'20px'}}>
+              <button onClick={goToLCDPage_1} style={{backgroundColor:'green', fontWeight:'bold', marginBottom:'10px'}}>Deck_1</button>
+              <button onClick={goToLCDPage_2} style={{backgroundColor:'green', fontWeight:'bold', marginBottom:'10px'}}>Deck_2</button>
+              <button onClick={goToLCDPage_3} style={{backgroundColor:'green', fontWeight:'bold', marginBottom:'10px'}}>Deck_3</button>
+            </div>
+            <div style={{display:'flex', flexDirection:'column'}}>
+              <button onClick={goToLCDPage_4} style={{backgroundColor:'green', fontWeight:'bold', marginBottom:'10px'}}>Deck_4</button>
+              <button onClick={goToLCDPage_5} style={{backgroundColor:'green', fontWeight:'bold', marginBottom:'10px'}}>Deck_5</button>
+              <button onClick={goToLCDPage_6} style={{backgroundColor:'green', fontWeight:'bold', marginBottom:'10px'}}>Deck_6</button>
+            </div>
+          </div>
+          
+          
 
           <Modal
             show={modalShow}
@@ -402,6 +573,8 @@ const MainLive = () => {
           </Modal>
         </div>
       </div>
+
+      <Footer/>
     </div>
   );
 };

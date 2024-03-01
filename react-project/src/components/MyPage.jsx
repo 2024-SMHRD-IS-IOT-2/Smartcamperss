@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import { Table, Form, Button, Row, Col, Modal } from "react-bootstrap";
 import axios from "../axios";
 import { useNavigate } from "react-router-dom";
+import Footer from "./Footer";
 
 const MyPage = () => {
   /* sessionStorage에 저장된 사용자정보(user) 가져오기 */
@@ -137,7 +138,7 @@ const MyPage = () => {
               개인정보수정
             </Button>
             <br/>
-            <Button variant="secondary" size="sm" onClick={handleReset} className="mx-auto d-block">
+            <Button variant="secondary" size="sm" onClick={handleReset} className="mx-auto d-block" style={{marginBottom:'10px'}}>
               다시쓰기
             </Button>
           </Col>
@@ -163,6 +164,8 @@ const MyPage = () => {
           </Button>
         </Modal.Footer>
       </Modal>
+
+      <Footer/>
     </div>
   );
 }

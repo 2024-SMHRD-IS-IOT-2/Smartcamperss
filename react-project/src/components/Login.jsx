@@ -35,7 +35,7 @@ const Login = () => {
       <br/>
       <br/>
       <br/>
-      <h1 className="text-center mb-4" style={{ fontFamily: 'JalnanGothic', color: 'green' }}>SmartCampers</h1>
+      <h1 className="text-center mb-4" style={{ fontFamily: 'JalnanGothic', color: '#ffb300' }}>SaveTheCampers</h1>
       <Form onSubmit={handleLogin} style={{ width: '300px', margin: '0 auto' }}>
         <Form.Group className="mb-3" controlId="formBasicID">
           <Form.Label> </Form.Label>
@@ -54,7 +54,7 @@ const Login = () => {
         </div>
       </Form>
       {/* 회원가입 링크 추가 */}
-      <p className="text-center">계정이 없으신가요? <Link to="/join">회원가입</Link></p>
+      <p className="text-center" style={{color:'white'}}>계정이 없으신가요? <Link to="/join">회원가입</Link></p>
     </Container>
   );
 };
