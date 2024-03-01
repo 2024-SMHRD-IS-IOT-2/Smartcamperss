@@ -57,7 +57,7 @@ const Join = () => {
                     camptel: camptelRef.current.value,
                 }).then((res) => {
                     console.log('요청성공', res.data);
-                    window.alert('⛺SavetheCampers 가입을 축하합니다⛺');
+                    window.alert('SavetheCampers 가입을 축하합니다😄😁');
                     window.location.href = '/';
                 });
             }
@@ -68,7 +68,7 @@ const Join = () => {
         <Container>
             <Row className="justify-content-center">
                 <Col md={6}>
-                  <h6 className="text-center" style={{ color: "green" }}>안녕하세요 세이브더캠퍼즈 입니다 회원정보를 입력해주세요</h6>
+                  <h6 className="text-center" style={{ color: "white" }}>캠퍼들의 안전을 지켜주는 세이브더캠퍼즈 입니다 회원정보를 입력해주세요</h6>
                     
                     <Form onSubmit={handleJoin}>
                         <Form.Group controlId="formBasicId">

@@ -48,6 +48,7 @@ function Notice() {
     <div>
       <br/>
       <br/>
+      <h6 className="text-center" style={{ color: "white" }}>알림페이지 - 회원님들께 메세지를 발송 할 수 있습니다</h6>
       <br/>
       
       <div style={{marginTop:'50px', textAlign:'center'}}>

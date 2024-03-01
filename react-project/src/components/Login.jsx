@@ -18,7 +18,7 @@ const Login = () => {
         // 로그인 성공 : success | 로그인 실패 : fail
         if (res.data.result === 'success') {
           const user = res.data.user;
-          alert(`${user.name}님 환영합니다🏕️`); // 세션값 활용하여 환영 메시지 생성
+          alert(`${user.name}님!! 캠퍼들의 안전을 지키는 세이브더캠퍼즈입니다 `); // 세션값 활용하여 환영 메시지 생성
           sessionStorage.setItem('user', JSON.stringify(res.data.user)); //세션생성
           navigate('/mainlive');
         } else {
