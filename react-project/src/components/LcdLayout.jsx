@@ -4,11 +4,13 @@
 */
 import React, { useContext, useEffect, useState } from 'react'
 import { ClimateContext } from '../context/ClimateContext';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from '../axios';
 
 const LcdLayout = () => {
   const user = JSON.parse(sessionStorage.getItem("user")); //세션
+
+  const navigate = useNavigate();
 
   // 관리자 값 부여
   let camp_manger = user.id;
@@ -161,6 +163,11 @@ const LcdLayout = () => {
     const openAnnouncement = ()=>{
       setCheckAnnouncement(true);
     }
+
+    // 뒤로가기
+    const goBack = ()=>{
+      navigate('/mainlive')
+    }
  
 
 
@@ -171,7 +178,8 @@ const LcdLayout = () => {
       <br /><br />
       <h3 className="text-center mb-4" style={{ fontFamily: 'JalnanGothic', color: '#ffb300' }}>SavetheCampers</h3>
       <br />
-      
+      {/* 뒤로가기 버튼 */}
+      <button onClick={goBack} style={{position:'absolute', top:'10px', left:'10px', backgroundColor:'green'}}>뒤로가기</button>
       {/* 공지사항 */}
       {checkAnnouncement && 
       <div style={{backgroundColor:'white', opacity:'50%', position:'absolute', bottom:'0', right:'0'}}>
