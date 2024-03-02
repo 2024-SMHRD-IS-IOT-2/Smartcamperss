@@ -221,34 +221,34 @@ const MainLive = () => {
   // ************ 날씨 *************************************
 
   // 위치정보(경도, 위도) 받아오기 => getCurrentWeather() 실행
-  const getCurrentLocation = () => {
-    navigator.geolocation.getCurrentPosition((position) => {
-      lat = position.coords.latitude;
-      lon = position.coords.longitude;
+  // const getCurrentLocation = () => {
+  //   navigator.geolocation.getCurrentPosition((position) => {
+  //     lat = position.coords.latitude;
+  //     lon = position.coords.longitude;
 
-      getCurrentWeather(lat, lon);
-    });
-  };
+  //     getCurrentWeather(lat, lon);
+  //   });
+  // };
 
-  // OpenWeather API에서 날씨정보(response.data) 받아오기
-  const getCurrentWeather = async (lat, lon) => {
-    const API_KEY = process.env.REACT_APP_API_KEY;
-    let weather_url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`;
+  // // OpenWeather API에서 날씨정보(response.data) 받아오기
+  // const getCurrentWeather = async (lat, lon) => {
+  //   const API_KEY = process.env.REACT_APP_API_KEY;
+  //   let weather_url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`;
 
-    let response = await axios.get(weather_url);
-    // console.log('날씨!!!!!!!!!!!', response.data);
-    setWeather(response.data);
-  };
+  //   let response = await axios.get(weather_url);
+  //   // console.log('날씨!!!!!!!!!!!', response.data);
+  //   setWeather(response.data);
+  // };
 
-  // mounting 될 때, 날씨 띄우기
-  useEffect(() => {
-    // eslint-disable-next-line
-    getCurrentLocation();
-  },[]);
+  // // mounting 될 때, 날씨 띄우기
+  // useEffect(() => {
+  //   // eslint-disable-next-line
+  //   getCurrentLocation();
+  // },[]);
 
-  setInterval(() => {
-    getCurrentLocation();
-  }, 5000);
+  // setInterval(() => {
+  //   getCurrentLocation();
+  // }, 3600000);
 
 
 
