@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Button, Table } from "react-bootstrap";
 import axios from "../axios";
 import Footer from "./Footer";
+import Header from "./Header";
 
 const DBManage = () => {
   let user = JSON.parse(sessionStorage.getItem("user")) || null;
@@ -163,7 +164,8 @@ const handleButtonClick_gas = () => {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-      
+      <Header/>
+
       <br/>
       <br/>
       <br/>

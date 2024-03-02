@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react';
 import axios from 'axios';
 import Footer from './Footer';
 import { Button } from "react-bootstrap";
+import Header from './Header';
 
 function Notice() {
   const messageInputRef = useRef(null);
@@ -46,6 +47,8 @@ function Notice() {
 
   return (
     <div>
+      <Header/>
+
       <br/>
       <br/>
       <h6 className="text-center" style={{ color: "white" }}>알림페이지 - 회원님들께 메세지를 발송 할 수 있습니다</h6>

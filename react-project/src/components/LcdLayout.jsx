@@ -16,7 +16,8 @@ const LcdLayout = () => {
   const [batteryStyle, setBatteryStyle] = useState({
     backgroundColor:'orange',
     width:'0%',
-    height:'90%'
+    height:'90%',
+    textAlign:'start'
   });
 
     // sensor.jsx(node)에서 받아온 값을 담을 state
@@ -43,6 +44,12 @@ const LcdLayout = () => {
 
     //데크 메세지 변수 정의
     const [deckMessages, setDeckMessages] = useState([]); 
+
+    // 공지사항 열기
+    const [checkAnnouncement, setCheckAnnouncement] = useState(false);
+
+
+    // =============함수들=====================================
 
     //데크 메세지 가져오는 함수 선언
     const getDeckMessages = async () => {
@@ -149,12 +156,110 @@ const LcdLayout = () => {
         return ()=>clearInterval(interval);
       
     }, [data])
+
+    // 공지사항 열기
+    const openAnnouncement = ()=>{
+      setCheckAnnouncement(true);
+    }
  
 
 
+    // ============ return문 =============================================
 
   return (
     <div style={{margin:'0', padding:'0'}}>
+      <br /><br />
+      <h3 className="text-center mb-4" style={{ fontFamily: 'JalnanGothic', color: '#ffb300' }}>SavetheCampers</h3>
+      <br />
+      
+      {/* 공지사항 */}
+      {checkAnnouncement && 
+      <div style={{backgroundColor:'white', opacity:'50%', position:'absolute', bottom:'0', right:'0'}}>
+        <ul>
+          <li>일산화탄소 수치 : 정상(20ppm이하) / 위험(25ppm이상)</li>
+          <li>입실 시간 : 15시 / 퇴실 시간 : 12시</li>
+          <li>취침 시간 : 23시</li>
+          <li>SavetheCampers에 오신걸 환영합니다~😍</li>
+        </ul>
+        <button onClick={()=>setCheckAnnouncement(false)} style={{backgroundColor:'green'}}>닫기</button>
+      </div>}
+        
+        <div style={{display:'flex', justifyContent:'space-evenly', marginBottom:'10px'}}>
+          {/* 테이블 */}
+        {data.deck_num == decknum
+        ? (
+            <table style={{width:'50%', textAlign:'center'}}>
+              <tr>
+                <th style={{ border: "1px solid black" }}></th>
+                <th style={{ border: "1px solid black" }}>데크 {data.deck_num}</th>
+              </tr>
+              {/* 일산화탄소 */}
+              <tr>
+                <td>일산화탄소</td>
+                {parseInt(data.co/17) < 23
+                ? (<td
+                  className="stableGreen"
+                  style={{ border: "1px solid black" }}>
+                  {parseInt(data.co/17)}ppm
+                </td>)
+                : (parseInt(data.co/17) < 25 
+                ? (
+                <td
+                  className="warningOrange"
+                  style={{ border: "1px solid black" }}
+                >
+                  {parseInt(data.co/17)}ppm
+                </td>) 
+                : (
+                <td
+                  className="warningRed"
+                  style={{ border: "1px solid black" }}
+                >
+                  {parseInt(data.co/17)}ppm
+                </td>
+              ))
+                }
+              </tr>
+              {/* 온/습도 */}
+              <tr>
+                <td style={{ border: "1px solid black" }}>온도</td>
+                <td style={{ border: "1px solid black" }}>{data.temperature}°C</td>
+              </tr>
+              <tr style={{ border: "1px solid black" }}>
+                <td style={{ border: "1px solid black" }}>습도</td>
+                <td style={{ border: "1px solid black" }}>{data.humidity}%</td>
+              </tr>
+              {/* 공기질 */}
+              <tr>
+                <td style={{ border: "1px solid black" }}>공기질</td>
+                {data.air < 150 ? (
+                <td
+                  className="stableGreen"
+                  style={{ border: "1px solid black" }}
+                >
+                  안정
+                </td>
+              ) : (
+                <td
+                  className="warningRed"
+                  style={{ border: "1px solid black" }}
+                >
+                  위험
+                </td>
+              )}
+              </tr>
+              {/* 배터리 */}
+              <tr>
+                <td style={{ border: "1px solid black" }}>배터리</td>
+                <td style={{ border: "1px solid black" }}>
+                <div style={batteryStyle}>battery</div>
+                </td>
+              </tr>
+            </table>
+        )
+        : (null)
+        }
+
         {/* 날씨API 띄우기 */}
         <div className="totalClimate" style={{color:'white', fontWeight:'900'}}>
           <p>{today.toLocaleString()}</p>
@@ -174,79 +279,24 @@ const LcdLayout = () => {
           </div>
           </div>
         </div>
-        {data.deck_num == decknum
-        ? (
-            <table className="table" style={{border:'3px solid black'}}>
-            {/* 제목 행 */}
-            <tr style={{border:'1px solid black'}}>
-              <th style={{border:'1px solid black'}}></th>
-              <th style={{border:'1px solid black'}}>일산화탄소</th>
-              <th style={{border:'1px solid black'}}>온 도</th>
-              <th style={{border:'1px solid black'}}>습 도</th>
-              <th style={{border:'1px solid black'}}>공기질</th>
-              <th style={{border:'1px solid black'}}>배터리</th>
-            </tr>
-            <tr style={{ border: "1px solid black" }}>
-              <td style={{ border: "1px solid black" }}>데크{data.deck_num}</td>
-              {data.co < 200 ? (
-                <td
-                  className="stableGreen"
-                  style={{ border: "1px solid black" }}
-                >
-                  {data.co}
-                </td>
-              ) : data.co < 300 ? (
-                <td
-                  className="warningOrange"
-                  style={{ border: "1px solid black" }}
-                >
-                  {data.co}
-                </td>
-              ) : (
-                <td
-                  className="warningRed"
-                  style={{ border: "1px solid black" }}
-                >
-                  {data.co}
-                </td>
-              )}
-              <td style={{ border: "1px solid black" }}>
-                {data.temperature}
-              </td>
-              <td style={{ border: "1px solid black" }}>
-                {data.humidity}
-              </td>
-              {data.air < 70 ? (
-                <td
-                  className="stableGreen"
-                  style={{ border: "1px solid black" }}
-                >
-                  {data.air}
-                </td>
-              ) : (
-                <td
-                  className="warningRed"
-                  style={{ border: "1px solid black" }}
-                >
-                  {data.air}
-                </td>
-              )}
-              <td style={{ border: "1px solid black" }}>
-                <div style={batteryStyle}>battery</div>
-              </td>
-            </tr>
-        </table>
-        )
-        : (null)
-        }
-        {/* deckmessages를 map함수로 뛰워줌 */}
-        <div style={{backgroundColor:'white'}}>
-            <ul>
-            {deckMessages.map((message, index) => (
-            <li key={index}>{message}</li>
-              ))}
-            </ul>
         </div>
+
+          {/* deckmessages를 map함수로 뛰워줌 */}
+          {deckMessages
+          ? (
+            <div style={{backgroundColor:'white', }}>
+              <ul>
+              {deckMessages.map((message, index) => (
+              <li key={index}>{message}</li>
+              ))}
+              </ul>
+            </div>
+          )
+          : (null)
+          }
+          {!checkAnnouncement &&
+          <button onClick={openAnnouncement} style={{backgroundColor:'green', position:'fixed', bottom:'30px', right:'30px'}}>공지사항</button>
+          }
     </div>
   )
 }

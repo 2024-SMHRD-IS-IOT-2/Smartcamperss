@@ -7,6 +7,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { ClimateContext } from "../context/ClimateContext";
 import { useNavigate } from "react-router-dom";
 import Footer from "./Footer";
+import Header from "./Header";
 
 
 const MainLive = () => {
@@ -117,7 +118,7 @@ const MainLive = () => {
         // console.log(user.id);
 
         // 위험알림
-        if(response.data.sensorData[camp_manger][1].co > 73){
+        if(parseInt(response.data.sensorData[camp_manger][1].co/17) > 25){
           // console.log('CO에러',data.co);
           setShowAlert(true);
           setIsFetching(false);
@@ -281,6 +282,8 @@ const MainLive = () => {
   // ============== return문 ======================
   return (
     <div>
+      <Header/>
+
       {/* 경고창 */}
       {showAlert && (
         <div style={{position: 'absolute', zIndex: 98, backgroundColor:'red', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', border: "2px solid black", display:'flex', flexDirection:'column', alignItems:'center', padding:'1%'}}>
@@ -315,11 +318,11 @@ const MainLive = () => {
               <td style={{ border: "1px solid black" }}>데크1</td>
 
               {/* CO 데이터 */}
-              {data.co < 200 
+              {parseInt(data.co/17) < 23 
               ? (<td className="stableGreen" style={{ border: "1px solid black" }}>
                   {parseInt(data.co/17)}ppm
                 </td>) 
-                : data.co < 300 
+                : parseInt(data.co/17) < 25 
                 ? (<td className="warningOrange" style={{ border: "1px solid black" }}>
                   {parseInt(data.co/17)}ppm
                 </td>) 

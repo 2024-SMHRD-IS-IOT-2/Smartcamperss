@@ -3,6 +3,7 @@ import { Table, Form, Button, Row, Col, Modal } from "react-bootstrap";
 import axios from "../axios";
 import { useNavigate } from "react-router-dom";
 import Footer from "./Footer";
+import Header from "./Header";
 
 const MyPage = () => {
   /* sessionStorage에 저장된 사용자정보(user) 가져오기 */
@@ -72,6 +73,8 @@ const MyPage = () => {
 
   return (
     <div className="main-body">
+      <Header/>
+
       <br/>
       <br/>
       <br/>
