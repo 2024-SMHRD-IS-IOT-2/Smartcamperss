@@ -74,7 +74,22 @@ table, th, td{
 }
 
 /* LCD layout */
+@keyframes blink {
+  0% {opacity: 1;}
+  50% {opacity: 0;}
+  100% {opacity: 1;}
+}
+.dangerSituation{
+  animation: blink 1s 5;
+  background-color: red;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
+}
 
 /* Footer.jsx */
 .footerComponent {

@@ -64,7 +64,7 @@ let sensorData = {
       battery : 450,
       fire_1 : 90,
       fire_2 : 1200,
-      air : 120,
+      air : 200,
       co : 70,
       btn : 0
     }

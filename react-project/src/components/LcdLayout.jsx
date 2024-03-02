@@ -6,6 +6,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { ClimateContext } from '../context/ClimateContext';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from '../axios';
+import '../App.css';
 
 const LcdLayout = () => {
   const user = JSON.parse(sessionStorage.getItem("user")); //세션
@@ -49,7 +50,9 @@ const LcdLayout = () => {
 
     // 공지사항 열기
     const [checkAnnouncement, setCheckAnnouncement] = useState(false);
-
+    
+    // 위험 알림으로 화면 꽉 채우기
+    const [checkDangerDiv, setCheckDangerDiv] = useState(false);
 
     // =============함수들=====================================
 
@@ -114,6 +117,37 @@ const LcdLayout = () => {
           });
           console.log('담은 값',data.co);
           // console.log(user.id);
+
+          // 위험상황 시, div태그 깜빡이기
+          if(parseInt(response.data.sensorData[camp_manger][1].co/17) > 25){
+            // console.log('CO에러',data.co);
+            setCheckDangerDiv(true);
+            const timer = setTimeout(()=>{
+              setCheckDangerDiv(false);
+            }, 5000);
+            return ()=> clearTimeout(timer);
+          }else if(response.data.sensorData[camp_manger][1].air > 150){
+            // console.log('air에러',data.air);
+            setCheckDangerDiv(true);
+            const timer = setTimeout(()=>{
+              setCheckDangerDiv(false);
+            }, 5000);
+            return ()=> clearTimeout(timer);
+          }else if(response.data.sensorData[camp_manger][1].fire_1 >240){
+            // console.log('fire1에러',data.fire_1);
+            setCheckDangerDiv(true);
+            const timer = setTimeout(()=>{
+              setCheckDangerDiv(false);
+            }, 5000);
+            return ()=> clearTimeout(timer);
+          }else if(response.data.sensorData[camp_manger][1].fire_2 < 1000){
+            // console.log('fire2에러',data.fire_2);
+            setCheckDangerDiv(true);
+            const timer = setTimeout(()=>{
+              setCheckDangerDiv(false);
+            }, 5000);
+            return ()=> clearTimeout(timer);
+          }
   
           //배터리 잔량에 따른 모양 설정
           if (response.data.sensorData[camp_manger][1].battery > 420) {
@@ -154,8 +188,10 @@ const LcdLayout = () => {
   
       // 5초 간격으로 데이터 가져오는 함수 실행(창 안뜰 때 == 일정수치 안넘었을 때)
       
-        const interval = setInterval(() => fetchData(), 5000);
-        return ()=>clearInterval(interval);
+        if(!checkDangerDiv){
+          const interval = setInterval(() => fetchData(), 5000);
+          return ()=>clearInterval(interval);
+        }
       
     }, [data])
 
@@ -175,9 +211,17 @@ const LcdLayout = () => {
 
   return (
     <div style={{margin:'0', padding:'0'}}>
+      {/* 위험알림 꽉 채우기 */}
+      {checkDangerDiv &&
+        <div className='dangerSituation'>
+          <h1>현재 텐트 안이 위험합니다! 신속히 대피하세요!!</h1>
+        </div>
+      }
       <br /><br />
       <h3 className="text-center mb-4" style={{ fontFamily: 'JalnanGothic', color: '#ffb300' }}>SavetheCampers</h3>
       <br />
+
+
       {/* 뒤로가기 버튼 */}
       <button onClick={goBack} style={{position:'absolute', top:'10px', left:'10px', backgroundColor:'green'}}>뒤로가기</button>
       {/* 공지사항 */}
