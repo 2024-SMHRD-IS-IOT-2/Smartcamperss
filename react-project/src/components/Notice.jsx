@@ -83,13 +83,6 @@ function Notice() {
     <Button onClick={handleNotificationClose} variant="outline-success" size="sm">확인</Button>
   </div>
 )}
-
-      <div style={{position:'fixed', bottom:'0', width:'100%'}}>
-        
-        <br/>
-        <br/>
-        <Footer/>
-      </div>
     </div>
   );
 }

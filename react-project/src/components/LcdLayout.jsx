@@ -6,7 +6,6 @@ import React, { useContext, useEffect, useState } from 'react'
 import { ClimateContext } from '../context/ClimateContext';
 import { useParams } from 'react-router-dom';
 import axios from '../axios';
-import Footer from './Footer';
 
 const LcdLayout = () => {
   const user = JSON.parse(sessionStorage.getItem("user")); //세션
@@ -16,7 +15,7 @@ const LcdLayout = () => {
   
   const [batteryStyle, setBatteryStyle] = useState({
     backgroundColor:'orange',
-    width:'50%',
+    width:'0%',
     height:'90%'
   });
 
@@ -247,10 +246,6 @@ const LcdLayout = () => {
             <li key={index}>{message}</li>
               ))}
             </ul>
-        </div>
-
-        <div style={{position:'fixed', bottom:'0', width:'100%'}}>
-        <Footer/>
         </div>
     </div>
   )

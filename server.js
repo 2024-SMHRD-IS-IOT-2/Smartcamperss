@@ -65,8 +65,8 @@ let sensorData = {
       fire_1 : 90,
       fire_2 : 1200,
       air : 120,
-      co : 75,
-      btn : 1
+      co : 70,
+      btn : 0
     }
   }
 };

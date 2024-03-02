@@ -87,11 +87,13 @@ const MainLive = () => {
   const [btnRed1, setBtnRed1] = useState(false);
 
   // 랜덤숫자 생성
-  const coRandom = Math.floor(Math.random() * 50) + 1;
-  const tempRandom = Math.floor(Math.random() * 6) + 20;
-  const humRandom = Math.floor(Math.random() * 50) + 1;
-  const airRandom = Math.floor(Math.random() * 101) + 100;
+  const [coRandoms, setCoRandom] = useState([0,0,0,0,0]);
+  const [tempRandoms, setTempRandoms] = useState([0,0,0,0,0]);
+  const [humRandoms, setHumRandoms] = useState([0,0,0,0,0]);
+  const [airRandoms, setAirRandoms] = useState([0,0,0,0,0]);
 
+  
+  
   // ============== 서버 작동 ======================
 
   useEffect(()=>{
@@ -124,7 +126,7 @@ const MainLive = () => {
             mem_id: user.id,
             deck_id: response.data.sensorData[camp_manger][1].deck_num,
           });
-        }else if(response.data.sensorData[camp_manger][1].air > 200){
+        }else if(response.data.sensorData[camp_manger][1].air > 150){
           // console.log('air에러',data.air);
           setShowAlert(true);
           setIsFetching(false);
@@ -222,10 +224,25 @@ const MainLive = () => {
     console.log('빨간색(true)', btnRed1);
   }
 
+  // 빨갛게 된 칸 누르면 하얗게 변하기 => 위험 해결되면 끄도록!
   const handleBtn = ()=>{
     setBtnRed1(false);
     console.log('하얀색(false)', btnRed1);
   }
+
+  // 랜덤숫자 만들기
+  useEffect(()=>{
+    const createRandoms = setInterval(() => {
+      setCoRandom(Array.from({length: 5}, () => Math.floor(Math.random() * 11) + 70))
+      setTempRandoms(Array.from({length: 5}, () => Math.floor(Math.random() *6) + 20))
+      setHumRandoms(Array.from({length: 5}, () => Math.floor(Math.random() * 50) + 1))
+      setAirRandoms(Array.from({length: 5}, () => Math.floor(Math.random() * 101) + 100))
+   }, 5000);
+
+   return ()=>{
+    clearInterval(createRandoms);
+   }
+  }, [])
 
   // ************ 날씨 *************************************
 
@@ -283,9 +300,9 @@ const MainLive = () => {
       <div style={{display:'flex', justifyContent:'space-evenly', margin:'80px 0px 0px 0px'}}>
 
         {/* 센서값 데이터 테이블 */}
-          <table style={{ border: "3px solid black", width:'70%'}}>
+          <table style={{ border: "3px solid black", width:'70%', textAlign:'center'}}>
             {/* 제목 행 */}
-            <tr style={{ border: "1px solid black", textAlign:'center' }}>
+            <tr style={{ border: "1px solid black"}}>
               <th style={{ border: "1px solid black" }}></th>
               <th style={{ border: "1px solid black" }}>일산화탄소</th>
               <th style={{ border: "1px solid black" }}>온 도</th>
@@ -300,37 +317,37 @@ const MainLive = () => {
               {/* CO 데이터 */}
               {data.co < 200 
               ? (<td className="stableGreen" style={{ border: "1px solid black" }}>
-                  {data.co}
+                  {parseInt(data.co/17)}ppm
                 </td>) 
                 : data.co < 300 
                 ? (<td className="warningOrange" style={{ border: "1px solid black" }}>
-                  {data.co}
+                  {parseInt(data.co/17)}ppm
                 </td>) 
                   : (<td className="warningRed" style={{ border: "1px solid black" }}>
-                  {data.co}
+                  {parseInt(data.co/17)}ppm
                 </td>)
               }
 
               {/* 온/습도 데이터 */}
               <td style={{ border: "1px solid black" }}>
-                {data.temperature}
+                {data.temperature}°C
               </td>
               <td style={{ border: "1px solid black" }}>
-                {data.humidity}
+                {data.humidity}%
               </td>
 
               {/* 공기질 데이터 */}
               {data.air < 200 
               ? (<td className="stableGreen" style={{ border: "1px solid black" }}>
-                  {data.air}
+                  정상
                 </td>) 
                 : (<td className="warningRed" style={{ border: "1px solid black" }}>
-                  {data.air}
+                  위험
                 </td>)
               }
 
               {/* 배터리 데이터 */}
-              <td style={{ border: "1px solid black" }}>
+              <td style={{ border: "1px solid black", textAlign:'start' }}>
                 {/* {res.data.sensorData[camp_manger][1].battery} */}
                 <div style={batteryStyle}>battery</div>
               </td>
@@ -345,104 +362,80 @@ const MainLive = () => {
             </tr>
             <tr style={{ border: "1px solid black" }}>
               <td style={{ border: "1px solid black" }}>데크2</td>
-              <td 
-                className="stableGreen"
-                style={{ border: "1px solid black" }}>
-                120
+              <td className="stableGreen" style={{ border: "1px solid black" }}>
+                {parseInt(coRandoms[0]/17)}ppm
               </td>
-              <td style={{ border: "1px solid black" }}>23</td>
-              <td style={{ border: "1px solid black" }}>13</td>
-              <td
-              className="stableGreen"
-              style={{ border: "1px solid black" }}>
-                25</td>
+              <td style={{ border: "1px solid black" }}>{tempRandoms[0]}°C</td>
+              <td style={{ border: "1px solid black" }}>{humRandoms[0]}%</td>
+              <td className="stableGreen" style={{ border: "1px solid black" }}>
+                정상
+                </td>
               <td>
-              <div
-                  style={{width:'80%', backgroundColor:'green'}}
-                ></div>
+              <div style={{width:'25%', backgroundColor:'orange', textAlign:'start'}}>battery</div>
               </td>
               <td style={{ border: "1px solid black" }}></td>
             </tr>
             <tr style={{ border: "1px solid black" }}>
               <td style={{ border: "1px solid black" }}>데크3</td>
-              <td 
-                className="stableGreen"
-                style={{ border: "1px solid black" }}>
-                120
+              <td className="stableGreen" style={{ border: "1px solid black" }}>
+                {parseInt(coRandoms[1]/17)}ppm
               </td>
-              <td style={{ border: "1px solid black" }}>23</td>
-              <td style={{ border: "1px solid black" }}>13</td>
-              <td
-              className="stableGreen"
-              style={{ border: "1px solid black" }}>
-                25</td>
+              <td style={{ border: "1px solid black" }}>{tempRandoms[1]}°C</td>
+              <td style={{ border: "1px solid black" }}>{humRandoms[1]}%</td>
+              <td className="stableGreen" style={{ border: "1px solid black" }}>
+                정상
+                </td>
               <td>
-              <div
-                  style={{width:'50%', backgroundColor:'orange'}}
-                ></div>
+              <div style={{width:'75%', backgroundColor:'green', textAlign:'start'}}>battery</div>
               </td>
               <td style={{ border: "1px solid black" }}></td>
             </tr>
             <tr style={{ border: "1px solid black" }}>
               <td style={{ border: "1px solid black" }}>데크4</td>
-              <td 
-                className="stableGreen"
-                style={{ border: "1px solid black" }}>
-                120
+              <td className="stableGreen" style={{ border: "1px solid black" }}>
+                {parseInt(coRandoms[2]/17)}ppm
               </td>
-              <td style={{ border: "1px solid black" }}>23</td>
-              <td style={{ border: "1px solid black" }}>13</td>
-              <td
-              className="stableGreen"
-              style={{ border: "1px solid black" }}>
-                25</td>
+              <td style={{ border: "1px solid black" }}>{tempRandoms[2]}°C</td>
+              <td style={{ border: "1px solid black" }}>{humRandoms[2]}%</td>
+              <td className="stableGreen" style={{ border: "1px solid black" }}>
+              정상
+                </td>
               <td>
-              <div
-                  style={{width:'25%', backgroundColor:'red'}}
-                ></div>
+              <div style={{width:'10%', backgroundColor:'red', textAlign:'start'}}>battery</div>
               </td>
               <td style={{ border: "1px solid black" }}></td>
             </tr>
             <tr style={{ border: "1px solid black" }}>
               <td style={{ border: "1px solid black" }}>데크5</td>
-              <td 
-                className="stableGreen"
-                style={{ border: "1px solid black" }}>
-                120
+              <td className="stableGreen" style={{ border: "1px solid black" }}>
+                {parseInt(coRandoms[3]/17)}ppm
               </td>
-              <td style={{ border: "1px solid black" }}>23</td>
-              <td style={{ border: "1px solid black" }}>13</td>
-              <td
-              className="stableGreen"
-              style={{ border: "1px solid black" }}>
-                25</td>
+              <td style={{ border: "1px solid black" }}>{tempRandoms[3]}°C</td>
+              <td style={{ border: "1px solid black" }}>{humRandoms[3]}%</td>
+              <td className="stableGreen" style={{ border: "1px solid black" }}>
+              정상
+                </td>
               <td>
-              <div
-                  style={{width:'10%', backgroundColor:'red'}}
-                ></div>
+              <div style={{width:'100%', backgroundColor:'green', textAlign:'start'}}>battery</div>
               </td>
               <td style={{ border: "1px solid black" }}></td>
             </tr>
             <tr style={{ border: "1px solid black" }}>
               <td style={{ border: "1px solid black" }}>데크6</td>
-              <td 
-                className="stableGreen"
-                style={{ border: "1px solid black" }}>
-                120
+              <td className="stableGreen" style={{ border: "1px solid black" }}>
+                {parseInt(coRandoms[4]/17)}ppm
               </td>
-              <td style={{ border: "1px solid black" }}>23</td>
-              <td style={{ border: "1px solid black" }}>13</td>
-              <td
-              className="stableGreen"
-              style={{ border: "1px solid black" }}>
-                25</td>
+              <td style={{ border: "1px solid black" }}>{tempRandoms[4]}°C</td>
+              <td style={{ border: "1px solid black" }}>{humRandoms[4]}%</td>
+              <td className="stableGreen" style={{ border: "1px solid black" }}>
+              정상
+                </td>
               <td>
-              <div
-                  style={{width:'10%', backgroundColor:'red'}}
-                ></div>
+              <div style={{width:'75%', backgroundColor:'green', textAlign:'start'}}>battery</div>
               </td>
               <td style={{ border: "1px solid black" }}></td>
             </tr>
+            
             
           </table>
 
