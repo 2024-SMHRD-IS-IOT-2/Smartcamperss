@@ -65,7 +65,6 @@ const Header = () => {
               value={radio.value}
               checked={radioValue === radio.value}
               onChange={(e) => setRadioValue(e.currentTarget.value)}
-              onClick={radio.onClick}
             >
               {radio.name}
             </ToggleButton>

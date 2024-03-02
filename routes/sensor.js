@@ -12,11 +12,11 @@ let msg_idx=0;
 // server.js에서 센서값 받아와서 처리하는 함수
 function receiveSensorData (data){
   sensorData=data;
-  // console.log('server->sensor', sensorData);
+  console.log('server->sensor', sensorData);
 }
 
 // 클라이언트가 http://localhost:8000/sensor/data로 요청을 보냈을 때 작동하는 함수
-sensorRouter.post('/data', (req,res)=>{
+sensorRouter.get('/data', (req,res)=>{
   console.log(req.body);
   res.json({sensorData:sensorData});
 })
@@ -31,7 +31,7 @@ sensorRouter.post('/coWarning', (req,res)=>{
       console.log('가장 큰 msg_idx+1:', msg_idx);
     })
 
-    const sql = `insert into tb_co_warning(msg_idx, co_ppm, mem_id, deck_id, alert_time) values (${msg_idx}, ?, ?, ?, NOW())`;
+    const sql = "insert into tb_co_warning(msg_idx, co_ppm, mem_id, deck_id, alert_time) values (${msg_idx}, ?, ?, ?, NOW()) on duplicate key update msg_idx=values(msg_idx)";
 
     conn.query(sql, [coWarning, mem_id, deck_id], (err, rows) => {
       if (err) {
@@ -52,7 +52,7 @@ sensorRouter.post('/airWarning', (req,res)=>{
       msg_idx = (rows[0].max_idx+1)
       console.log('가장 큰 msg_idx+1:', msg_idx);
     })
-    const sql = 'insert into tb_gas_warning(msg_idx, mem_id, deck_id, alert_time) values (?, ?, ?, NOW())';
+    const sql = "insert into tb_gas_warning(msg_idx, mem_id, deck_id, alert_time) values (?, ?, ?, NOW()) on duplicate key update msg_idx=values(msg_idx)";
 
     conn.query(sql, [msg_idx, mem_id, deck_id], (err, rows) => {
       if (err) {
@@ -73,7 +73,7 @@ sensorRouter.post('/fireWarning', (req,res)=>{
       msg_idx = (rows[0].max_idx+1)
       console.log('가장 큰 msg_idx:', msg_idx);
     })
-    const sql = 'insert into tb_co_warning(msg_idx, mem_id, deck_id, alert_time) values (?, ?, ?, NOW())';
+    const sql = "insert into tb_co_warning(msg_idx, mem_id, deck_id, alert_time) values (?, ?, ?, NOW()) on duplicate key update msg_idx=values(msg_idx)";
 
     conn.query(sql, [msg_idx, mem_id, deck_id], (err, rows) => {
       if (err) {

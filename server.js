@@ -51,7 +51,28 @@ app.use('/notice', noticeRouter);
 // let battery = 0;
 
 /************** sensor값 받아오기 *************/
-let sensorData = {};
+let sensorData = {
+  smhrd1 : {
+    '1':{
+      camp_id : 'smhrd1',
+      deck_num : 1,
+      temperature : 20,
+      humidity : 10,
+      battery : 450,
+      fire_1 : 90,
+      fire_2 : 1200,
+      air : 120,
+      co : 70,
+      btn : 1
+    }
+  }
+};
+
+setInterval(() => {
+
+  receiveSensorData(sensorData)
+  
+}, 5000);
 
 io.on('connection', (socket) => {
   console.log('Client connected');
