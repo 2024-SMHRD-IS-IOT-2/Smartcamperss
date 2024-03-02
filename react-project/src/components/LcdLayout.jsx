@@ -16,7 +16,8 @@ const LcdLayout = () => {
   
   const [batteryStyle, setBatteryStyle] = useState({
     backgroundColor:'orange',
-    width:'50%'
+    width:'50%',
+    height:'90%'
   });
 
     // sensor.jsx(node)에서 받아온 값을 담을 state
@@ -232,10 +233,7 @@ const LcdLayout = () => {
                 </td>
               )}
               <td style={{ border: "1px solid black" }}>
-                {/* {res.data.sensorData[camp_manger][1].battery} */}
-                <div
-                  style={batteryStyle}
-                ></div>
+                <div style={batteryStyle}>battery</div>
               </td>
             </tr>
         </table>

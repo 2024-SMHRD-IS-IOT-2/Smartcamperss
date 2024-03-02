@@ -84,28 +84,18 @@ const MainLive = () => {
   // 캠퍼가 버튼 한 번 누르면 버튼테이블 색이 계속 빨개야 해서 만든 state
   const [btnRed1, setBtnRed1] = useState(false);
 
+  // 랜덤숫자 생성
+  const coRandom = Math.floor(Math.random() * 50) + 1;
+  const tempRandom = Math.floor(Math.random() * 6) + 20;
+  const humRandom = Math.floor(Math.random() * 50) + 1;
+  const airRandom = Math.floor(Math.random() * 101) + 100;
+
   // ============== 서버 작동 ======================
 
   useEffect(()=>{
     const fetchData = async ()=>{
       try{
         const response = await axios.get('/sensor/data')
-        // .then((res)=>{
-        //   setData({
-        //     camp_id: res.data.sensorData[camp_manger][1].camp_id,
-        //     deck_num: res.data.sensorData[camp_manger][1].deck_num,
-        //     temperature: res.data.sensorData[camp_manger][1].temperature,
-        //     humidity: res.data.sensorData[camp_manger][1].humidity,
-        //     battery: res.data.sensorData[camp_manger][1].battery,
-        //     fire1: res.data.sensorData[camp_manger][1].fire_1,
-        //     fire2: res.data.sensorData[camp_manger][1].fire_2,
-        //     air: res.data.sensorData[camp_manger][1].air,
-        //     co: res.data.sensorData[camp_manger][1].co,
-        //     btn: res.data.sensorData[camp_manger][1].btn
-        //   });
-        //   console.log('담은 값',data);
-        // });
-        // console.log('받아온 데이터',response.data);
         setData(response.data); // 받아온 데이터
         setData({
           camp_id: response.data.sensorData[camp_manger][1].camp_id,
