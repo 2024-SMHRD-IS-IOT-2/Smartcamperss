@@ -31,9 +31,9 @@ sensorRouter.post('/coWarning', (req,res)=>{
       console.log('가장 큰 msg_idx+1:', msg_idx);
     })
 
-    const sql = "insert into tb_co_warning(msg_idx, co_ppm, mem_id, deck_id, alert_time) values (${msg_idx}, ?, ?, ?, NOW()) on duplicate key update msg_idx=values(msg_idx)";
+    const sql = "insert into tb_co_warning(msg_idx, co_ppm, mem_id, deck_id, alert_time) values (?, ?, ?, ?, NOW()) on duplicate key update msg_idx=values(msg_idx)";
 
-    conn.query(sql, [coWarning, mem_id, deck_id], (err, rows) => {
+    conn.query(sql, [msg_idx, coWarning, mem_id, deck_id], (err, rows) => {
       if (err) {
         console.error('INSERT 실패:', err);
         return;

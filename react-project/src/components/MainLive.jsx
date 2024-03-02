@@ -33,6 +33,8 @@ const MainLive = () => {
   // 경고창을 표시할지 여부를 나타내는 상태 변수
   // true : 경고창 뜸 / false : 경고창 안뜸 
   const [showAlert, setShowAlert] = useState(false); 
+  // 버튼꺼 경고창 (따로)
+  const [showBtnAlert, setShowBtnAlert] = useState(false);
 
   // LCD페이지 이동
   const navigate = useNavigate();
@@ -140,8 +142,12 @@ const MainLive = () => {
           setIsFetching(false);
           axios.post("/sensor/fireWarning", {
             mem_id: user.id,
-            deck_id: response.data.sensorData[camp_manger][1].deck_num,
-          });
+            deck_id: response.data.sensorData[camp_manger][1].deck_num,});
+        }else if(
+          response.data.sensorData[camp_manger][1].btn === 1){
+          setShowBtnAlert(true);
+          setIsFetching(false);
+          // button DB저장
         }
 
         //배터리 잔량에 따른 모양 설정
@@ -184,7 +190,7 @@ const MainLive = () => {
 
         // 비상 버튼
         if(response.data.sensorData[camp_manger][1].btn == 1){
-          setShowAlert(true);
+          setShowBtnAlert(true);
           setIsFetching(false);
       }
 
@@ -205,6 +211,12 @@ const MainLive = () => {
   // 경고창에서 확인버튼 누르면 경고창 닫고, 다시 데이터 받아오기 시작!
   const handleAlertClose = ()=>{
     setShowAlert(false);
+    setIsFetching(true);
+  }
+
+  // 버튼 경고창에서 확인버튼 누르면 경고창 닫고, 테이블에 빨간표시, 데이터 받아오기 다시 시작!
+  const handleBtnAlertClose = ()=>{
+    setShowBtnAlert(false);
     setIsFetching(true);
     setBtnRed1(true);
     console.log('빨간색(true)', btnRed1);
@@ -254,10 +266,17 @@ const MainLive = () => {
     <div>
       {/* 경고창 */}
       {showAlert && (
-        <div style={{position: 'absolute', zIndex: 99, backgroundColor:'red', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', border: "2px solid black", display:'flex', flexDirection:'column', alignItems:'center', padding:'1%'}}>
+        <div style={{position: 'absolute', zIndex: 98, backgroundColor:'red', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', border: "2px solid black", display:'flex', flexDirection:'column', alignItems:'center', padding:'1%'}}>
           <p>{data.deck_num}번 데크에서 위험이 감지되었습니다!! 테이블창을 확인하세요!!</p>
           <button onClick={handleAlertClose}>닫기</button>
         </div>
+      )}
+      {/* 버튼 경고창 */}
+      {showBtnAlert && (
+        <div style={{position: 'absolute', zIndex: 99, backgroundColor:'red', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', border: "2px solid black", display:'flex', flexDirection:'column', alignItems:'center', padding:'1%'}}>
+        <p>{data.deck_num}번 데크에서 위험벨을 눌렀습니다!! 테이블창을 확인하세요!!</p>
+        <button onClick={handleBtnAlertClose}>닫기</button>
+      </div>
       )}
 
       {/* 테이블 + 날씨 데이터 (가로 배열) */}
