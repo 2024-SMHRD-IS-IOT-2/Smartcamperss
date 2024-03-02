@@ -76,7 +76,9 @@ const MainLive = () => {
   // 배터리 모양 선언
   const [batteryStyle, setBatteryStyle] = useState({
     backgroundColor:'orange',
-    width:'50%'
+    width:'50%',
+    height:'90%'
+
   });
 
   // 캠퍼가 버튼 한 번 누르면 버튼테이블 색이 계속 빨개야 해서 만든 state
@@ -157,31 +159,36 @@ const MainLive = () => {
           // 100%
           setBatteryStyle({
             backgroundColor:'green',
-            width:'100%'
+            width:'100%',
+            height:'90%'
           })
               } else if (response.data.sensorData[camp_manger][1].battery > 400) {
           // 75%
           setBatteryStyle({
             backgroundColor:'green',
-            width:'75%'
+            width:'75%',
+            height:'90%'
           })
               } else if (response.data.sensorData[camp_manger][1].battery > 389) {
           // 50%
           setBatteryStyle({
             backgroundColor:'orange',
-            width:'50%'
+            width:'50%',
+            height:'90%'
           })
               } else if (response.data.sensorData[camp_manger][1].battery > 380) {
           // 25%
           setBatteryStyle({
             backgroundColor:'orange',
-            width:'25%'
+            width:'25%',
+            height:'90%'
           })
               } else {
           // 10%
           setBatteryStyle({
             backgroundColor:'red',
-            width:'10%'
+            width:'10%',
+            height:'90%'
           })
               }   
 
@@ -316,7 +323,7 @@ const MainLive = () => {
               {/* 배터리 데이터 */}
               <td style={{ border: "1px solid black" }}>
                 {/* {res.data.sensorData[camp_manger][1].battery} */}
-                <div style={batteryStyle}></div>
+                <div style={batteryStyle}>battery</div>
               </td>
 
               {/* 버튼 */}
@@ -422,9 +429,10 @@ const MainLive = () => {
                 25</td>
               <td>
               <div
-                  style={{width:'100%', backgroundColor:'green'}}
+                  style={{width:'10%', backgroundColor:'red'}}
                 ></div>
               </td>
+              <td style={{ border: "1px solid black" }}></td>
             </tr>
             
           </table>
