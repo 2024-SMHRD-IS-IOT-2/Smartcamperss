@@ -54,6 +54,11 @@ const LcdLayout = () => {
     // 위험 알림으로 화면 꽉 채우기
     const [checkDangerDiv, setCheckDangerDiv] = useState(false);
 
+    // 현재 시간
+    const now = new Date();
+    const hour = now.getHours();
+    const minute = now.getMinutes();
+
     // =============함수들=====================================
 
     //데크 메세지 가져오는 함수 선언
@@ -86,22 +91,6 @@ const LcdLayout = () => {
       const fetchData = async ()=>{
         try{
           const response = await axios.get('/sensor/data')
-          // .then((res)=>{
-          //   setData({
-          //     camp_id: res.data.sensorData[camp_manger][1].camp_id,
-          //     deck_num: res.data.sensorData[camp_manger][1].deck_num,
-          //     temperature: res.data.sensorData[camp_manger][1].temperature,
-          //     humidity: res.data.sensorData[camp_manger][1].humidity,
-          //     battery: res.data.sensorData[camp_manger][1].battery,
-          //     fire1: res.data.sensorData[camp_manger][1].fire_1,
-          //     fire2: res.data.sensorData[camp_manger][1].fire_2,
-          //     air: res.data.sensorData[camp_manger][1].air,
-          //     co: res.data.sensorData[camp_manger][1].co,
-          //     btn: res.data.sensorData[camp_manger][1].btn
-          //   });
-          //   console.log('담은 값',data);
-          // });
-          // console.log('받아온 데이터',response.data);
           setData(response.data); // 받아온 데이터
           setData({
             camp_id: response.data.sensorData[camp_manger][1].camp_id,
@@ -115,38 +104,24 @@ const LcdLayout = () => {
             co: response.data.sensorData[camp_manger][1].co,
             btn: response.data.sensorData[camp_manger][1].btn
           });
-          console.log('담은 값',data.co);
+          // console.log('담은 값',data.co);
           // console.log(user.id);
 
           // 위험상황 시, div태그 깜빡이기
-          if(parseInt(response.data.sensorData[camp_manger][1].co/17) > 25){
+          if(response.data.sensorData[camp_manger][1].co > 50){
             // console.log('CO에러',data.co);
             setCheckDangerDiv(true);
-            const timer = setTimeout(()=>{
-              setCheckDangerDiv(false);
-            }, 5000);
-            return ()=> clearTimeout(timer);
-          }else if(response.data.sensorData[camp_manger][1].air > 150){
+          }else if(response.data.sensorData[camp_manger][1].air > 200){
             // console.log('air에러',data.air);
             setCheckDangerDiv(true);
-            const timer = setTimeout(()=>{
-              setCheckDangerDiv(false);
-            }, 5000);
-            return ()=> clearTimeout(timer);
           }else if(response.data.sensorData[camp_manger][1].fire_1 >240){
             // console.log('fire1에러',data.fire_1);
             setCheckDangerDiv(true);
-            const timer = setTimeout(()=>{
-              setCheckDangerDiv(false);
-            }, 5000);
-            return ()=> clearTimeout(timer);
           }else if(response.data.sensorData[camp_manger][1].fire_2 < 1000){
             // console.log('fire2에러',data.fire_2);
             setCheckDangerDiv(true);
-            const timer = setTimeout(()=>{
-              setCheckDangerDiv(false);
-            }, 5000);
-            return ()=> clearTimeout(timer);
+          }else{
+            setCheckDangerDiv(false);
           }
   
           //배터리 잔량에 따른 모양 설정
@@ -188,10 +163,8 @@ const LcdLayout = () => {
   
       // 5초 간격으로 데이터 가져오는 함수 실행(창 안뜰 때 == 일정수치 안넘었을 때)
       
-        if(!checkDangerDiv){
           const interval = setInterval(() => fetchData(), 5000);
           return ()=>clearInterval(interval);
-        }
       
     }, [data])
 
@@ -248,26 +221,26 @@ const LcdLayout = () => {
               {/* 일산화탄소 */}
               <tr>
                 <td>일산화탄소</td>
-                {parseInt(data.co/17) < 23
+                {data.co < 50
                 ? (<td
                   className="stableGreen"
                   style={{ border: "1px solid black" }}>
-                  {parseInt(data.co/17)}ppm
+                  {data.co}ppm
                 </td>)
-                : (parseInt(data.co/17) < 25 
+                : (data.co < 25 
                 ? (
                 <td
                   className="warningOrange"
                   style={{ border: "1px solid black" }}
                 >
-                  {parseInt(data.co/17)}ppm
+                  {data.co}ppm
                 </td>) 
                 : (
                 <td
                   className="warningRed"
                   style={{ border: "1px solid black" }}
                 >
-                  {parseInt(data.co/17)}ppm
+                  {data.co}ppm
                 </td>
               ))
                 }
@@ -284,7 +257,7 @@ const LcdLayout = () => {
               {/* 공기질 */}
               <tr>
                 <td style={{ border: "1px solid black" }}>공기질</td>
-                {data.air < 150 ? (
+                {data.air < 200 ? (
                 <td
                   className="stableGreen"
                   style={{ border: "1px solid black" }}
@@ -339,7 +312,7 @@ const LcdLayout = () => {
             <div style={{backgroundColor:'white', }}>
               <ul>
               {deckMessages.map((message, index) => (
-              <li key={index}>{message}</li>
+              <li key={index}>[{hour} : {minute}]   {message}</li>
               ))}
               </ul>
             </div>

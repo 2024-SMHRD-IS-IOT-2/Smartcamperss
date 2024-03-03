@@ -22,7 +22,7 @@ const MainLive = () => {
       temperature: 0,
       humidity: 0,
       battery: 0,
-      fire_1: 0,
+      fire_1: 1200,
       fire_2: 1200,
       air: 0,
       co: 0,
@@ -36,6 +36,8 @@ const MainLive = () => {
   const [showAlert, setShowAlert] = useState(false); 
   // 버튼꺼 경고창 (따로)
   const [showBtnAlert, setShowBtnAlert] = useState(false);
+  // 화재감지 경고창 (따로)
+  const [showFireAlert, setShowFireAlert] = useState(false);
 
   // LCD페이지 이동
   const navigate = useNavigate();
@@ -87,6 +89,9 @@ const MainLive = () => {
   // 캠퍼가 버튼 한 번 누르면 버튼테이블 색이 계속 빨개야 해서 만든 state
   const [btnRed1, setBtnRed1] = useState(false);
 
+  // 불꽃센서 활성 시, 버튼테이블 색 바뀌도록 만든 state
+  const [fireRed1, setFireRed1] = useState(false);
+
   // 랜덤숫자 생성
   const [coRandoms, setCoRandom] = useState([0,0,0,0,0]);
   const [tempRandoms, setTempRandoms] = useState([0,0,0,0,0]);
@@ -101,7 +106,7 @@ const MainLive = () => {
     const fetchData = async ()=>{
       try{
         const response = await axios.get('/sensor/data')
-        setData(response.data); // 받아온 데이터
+        // node에서 받아온 데이터
         setData({
           camp_id: response.data.sensorData[camp_manger][1].camp_id,
           deck_num: response.data.sensorData[camp_manger][1].deck_num,
@@ -118,7 +123,7 @@ const MainLive = () => {
         // console.log(user.id);
 
         // 위험알림
-        if(parseInt(response.data.sensorData[camp_manger][1].co/17) > 25){
+        if(response.data.sensorData[camp_manger][1].co > 50){
           // console.log('CO에러',data.co);
           setShowAlert(true);
           setIsFetching(false);
@@ -127,7 +132,7 @@ const MainLive = () => {
             mem_id: user.id,
             deck_id: response.data.sensorData[camp_manger][1].deck_num,
           });
-        }else if(response.data.sensorData[camp_manger][1].air > 150){
+        }else if(response.data.sensorData[camp_manger][1].air > 200){
           // console.log('air에러',data.air);
           setShowAlert(true);
           setIsFetching(false);
@@ -135,13 +140,13 @@ const MainLive = () => {
             mem_id: user.id,
             deck_id: response.data.sensorData[camp_manger][1].deck_num,
           });
-        }else if(response.data.sensorData[camp_manger][1].fire_1 >240){
+        }else if(response.data.sensorData[camp_manger][1].fire_1 < 900){
           // console.log('fire1에러',data.fire_1);
-          setShowAlert(true);
+          setShowFireAlert(true);
           setIsFetching(false);
-        }else if(response.data.sensorData[camp_manger][1].fire_2 < 1000){
+        }else if(response.data.sensorData[camp_manger][1].fire_2 < 900){
           // console.log('fire2에러',data.fire_2);
-          setShowAlert(true);
+          setShowFireAlert(true);
           setIsFetching(false);
           axios.post("/sensor/fireWarning", {
             mem_id: user.id,
@@ -196,7 +201,6 @@ const MainLive = () => {
           setShowBtnAlert(true);
           setIsFetching(false);
       }
-
       } catch(error){
         console.error(error);
       }
@@ -231,10 +235,24 @@ const MainLive = () => {
     console.log('하얀색(false)', btnRed1);
   }
 
+  // 경고창 확인버튼 누르면 경고창 닫고, 테이블에 빨간표시, 데이터 다시 받아오기 시작!
+  const handleFireAlertClose = ()=>{
+    setShowFireAlert(false);
+    setIsFetching(true);
+    setFireRed1(true);
+    console.log('화재 빨간색(true)', fireRed1);
+  }
+
+  // 빨갛게 된 칸 누르면 하얗게 변하기 => 위험 해결되면 끄도록!
+  const handleFire = ()=>{
+    setFireRed1(false);
+    console.log('화재 하얀색(false)', fireRed1);
+  }
+
   // 랜덤숫자 만들기
   useEffect(()=>{
     const createRandoms = setInterval(() => {
-      setCoRandom(Array.from({length: 5}, () => Math.floor(Math.random() * 11) + 70))
+      setCoRandom(Array.from({length: 5}, () => Math.floor(Math.random() * 31) + 20))
       setTempRandoms(Array.from({length: 5}, () => Math.floor(Math.random() *6) + 20))
       setHumRandoms(Array.from({length: 5}, () => Math.floor(Math.random() * 50) + 1))
       setAirRandoms(Array.from({length: 5}, () => Math.floor(Math.random() * 101) + 100))
@@ -248,34 +266,35 @@ const MainLive = () => {
   // ************ 날씨 *************************************
 
   // 위치정보(경도, 위도) 받아오기 => getCurrentWeather() 실행
-  // const getCurrentLocation = () => {
-  //   navigator.geolocation.getCurrentPosition((position) => {
-  //     lat = position.coords.latitude;
-  //     lon = position.coords.longitude;
+  const getCurrentLocation = () => {
+    navigator.geolocation.getCurrentPosition((position) => {
+      lat = position.coords.latitude;
+      lon = position.coords.longitude;
 
-  //     getCurrentWeather(lat, lon);
-  //   });
-  // };
+      getCurrentWeather(lat, lon);
+    });
+  };
 
-  // // OpenWeather API에서 날씨정보(response.data) 받아오기
-  // const getCurrentWeather = async (lat, lon) => {
-  //   const API_KEY = process.env.REACT_APP_API_KEY;
-  //   let weather_url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`;
+  // OpenWeather API에서 날씨정보(response.data) 받아오기
+  const getCurrentWeather = async (lat, lon) => {
+    const API_KEY = process.env.REACT_APP_API_KEY;
+    let weather_url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`;
 
-  //   let response = await axios.get(weather_url);
-  //   // console.log('날씨!!!!!!!!!!!', response.data);
-  //   setWeather(response.data);
-  // };
+    let response = await axios.get(weather_url);
+    // console.log('날씨!!!!!!!!!!!', response.data);
+    setWeather(response.data);
+    console.log('hihi')
+  };
 
-  // // mounting 될 때, 날씨 띄우기
-  // useEffect(() => {
-  //   // eslint-disable-next-line
-  //   getCurrentLocation();
-  // },[]);
+  // mounting 될 때, 날씨 띄우기
+  useEffect(() => {
+    // eslint-disable-next-line
+    getCurrentLocation();
+  },[]);
 
-  // setInterval(() => {
-  //   getCurrentLocation();
-  // }, 3600000);
+  setInterval(() => {
+    getCurrentLocation();
+  }, 3600000);
 
 
 
@@ -298,6 +317,13 @@ const MainLive = () => {
         <button onClick={handleBtnAlertClose}>닫기</button>
       </div>
       )}
+      {/* 화재 경고창 */}
+      {showFireAlert && (
+        <div style={{position: 'absolute', zIndex: 99, backgroundColor:'red', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', border: "2px solid black", display:'flex', flexDirection:'column', alignItems:'center', padding:'1%'}}>
+        <p>{data.deck_num}번 데크에 화재 위험이 있습니다!! 테이블창을 확인하세요!!</p>
+        <button onClick={handleFireAlertClose}>닫기</button>
+      </div>
+      )}
 
       {/* 테이블 + 날씨 데이터 (가로 배열) */}
       <div style={{display:'flex', justifyContent:'space-evenly', margin:'80px 0px 0px 0px'}}>
@@ -313,21 +339,22 @@ const MainLive = () => {
               <th style={{ border: "1px solid black" }}>공기질</th>
               <th style={{ border: "1px solid black" }}>배터리</th>
               <th style={{ border: "1px solid black" }}>위험벨</th>
+              <th style={{ border: "1px solid black" }}>화재감지</th>
             </tr>
             <tr style={{ border: "1px solid black" }}>
               <td style={{ border: "1px solid black" }}>데크1</td>
 
               {/* CO 데이터 */}
-              {parseInt(data.co/17) < 23 
+              {data.co < 50 
               ? (<td className="stableGreen" style={{ border: "1px solid black" }}>
-                  {parseInt(data.co/17)}ppm
+                  {data.co}ppm
                 </td>) 
-                : parseInt(data.co/17) < 25 
+                : data.co < 40 
                 ? (<td className="warningOrange" style={{ border: "1px solid black" }}>
-                  {parseInt(data.co/17)}ppm
+                  {data.co}ppm
                 </td>) 
                   : (<td className="warningRed" style={{ border: "1px solid black" }}>
-                  {parseInt(data.co/17)}ppm
+                  {data.co}ppm
                 </td>)
               }
 
@@ -359,9 +386,14 @@ const MainLive = () => {
                 {!btnRed1
                 ? (<td style={{ border: "1px solid black" }}></td>)
                 : (
-                  <td style={{ border: "1px solid black", backgroundColor:'red'}} onClick={handleBtn}></td>
+                  <td style={{ border: "1px solid black", backgroundColor:'red'}} onClick={handleBtn}>위험!</td>
                 )
                 }
+              {/* 화재 감지 */}
+              {!fireRed1
+              ? (<td style={{ border: "1px solid black"}}></td>)
+              : (<td style={{ border: "1px solid black", backgroundColor:'red'}} onClick={handleFire}>위험!</td>)
+              }
             </tr>
             <tr style={{ border: "1px solid black" }}>
               <td style={{ border: "1px solid black" }}>데크2</td>
@@ -376,6 +408,7 @@ const MainLive = () => {
               <td>
               <div style={{width:'25%', backgroundColor:'orange', textAlign:'start'}}>battery</div>
               </td>
+              <td style={{ border: "1px solid black" }}></td>
               <td style={{ border: "1px solid black" }}></td>
             </tr>
             <tr style={{ border: "1px solid black" }}>
@@ -392,6 +425,7 @@ const MainLive = () => {
               <div style={{width:'75%', backgroundColor:'green', textAlign:'start'}}>battery</div>
               </td>
               <td style={{ border: "1px solid black" }}></td>
+              <td style={{ border: "1px solid black" }}></td>
             </tr>
             <tr style={{ border: "1px solid black" }}>
               <td style={{ border: "1px solid black" }}>데크4</td>
@@ -406,6 +440,7 @@ const MainLive = () => {
               <td>
               <div style={{width:'10%', backgroundColor:'red', textAlign:'start'}}>battery</div>
               </td>
+              <td style={{ border: "1px solid black" }}></td>
               <td style={{ border: "1px solid black" }}></td>
             </tr>
             <tr style={{ border: "1px solid black" }}>
@@ -422,8 +457,13 @@ const MainLive = () => {
               <div style={{width:'100%', backgroundColor:'green', textAlign:'start'}}>battery</div>
               </td>
               <td style={{ border: "1px solid black" }}></td>
+              <td style={{ border: "1px solid black" }}></td>
             </tr>
-            <tr style={{ border: "1px solid black" }}>
+            {/* 6번데크에 사람 없을 때 X표시하는걸 표시함 */}
+            {/* 현재는 데이터 한개밖에 안받아와서 일부러 데이터 있을 때 X표시 하도록 해놓음 */}
+              {!data
+              ?(
+                <tr style={{ border: "1px solid black" }}>
               <td style={{ border: "1px solid black" }}>데크6</td>
               <td className="stableGreen" style={{ border: "1px solid black" }}>
                 {parseInt(coRandoms[4]/17)}ppm
@@ -437,7 +477,23 @@ const MainLive = () => {
               <div style={{width:'75%', backgroundColor:'green', textAlign:'start'}}>battery</div>
               </td>
               <td style={{ border: "1px solid black" }}></td>
+              <td style={{ border: "1px solid black" }}></td>
             </tr>
+              )
+              :(
+                <tr>
+                  <td>데크6</td>
+                  <td style={{ border: "1px solid black" }}>X</td>
+                  <td style={{ border: "1px solid black" }}>X</td>
+                  <td style={{ border: "1px solid black" }}>X</td>
+                  <td style={{ border: "1px solid black" }}>X</td>
+                  <td style={{ border: "1px solid black" }}>X</td>
+                  <td style={{ border: "1px solid black" }}>X</td>
+                  <td style={{ border: "1px solid black" }}>X</td>
+                </tr>
+              )
+              }
+            
             
             
           </table>

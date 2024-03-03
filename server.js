@@ -59,13 +59,13 @@ let sensorData = {
     '1':{
       camp_id : 'smhrd1',
       deck_num : 1,
-      temperature : 20,
-      humidity : 10,
-      battery : 450,
-      fire_1 : 90,
+      temperature : 22,
+      humidity : 32,
+      battery : 498,
+      fire_1 : 1200,
       fire_2 : 1200,
-      air : 200,
-      co : 70,
+      air : 146,
+      co : 40,
       btn : 0
     }
   }
