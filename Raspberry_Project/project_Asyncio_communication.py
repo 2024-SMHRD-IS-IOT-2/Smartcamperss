@@ -9,7 +9,7 @@ import asyncio
 ## 서버 주소 설정
 # SERVER_URL = 'http://211.228.36.207:8000' ## 홍철이형 IP
 # SERVER_URL = 'http://121.147.52.247:8000' ## 나의 IP
-SERVER_URL = 'http://172.20.10.9:8000' ## 홍철이형 노트북
+SERVER_URL = 'http://192.168.138.48:8000' ## 내 노트북 ip
 
 
 ## socket 통신 설정
@@ -18,7 +18,7 @@ sio = socketio.Client()
 
 
 ## socket 통신 함수 정의
-
+ 
 @sio.event
 def connect():
     print('Connection established')
@@ -68,7 +68,8 @@ async def get_analog_data():
     fireValue_2 = sr.analog_read(fireChannel_2)
     Airvalue = sr.analog_read(AirChannel)
     CoValue = sr.analog_read(CoChannel)
-    return batteryValue, fireValue_1, fireValue_2, Airvalue, CoValue
+    CoValue_cal = int(round((CoValue-100)*1.2,1)) ## 일산화탄소 농도 계산
+    return batteryValue, fireValue_1, fireValue_2, Airvalue,CoValue_cal, CoValue
 
 
 ## server send 함수 및 접속 함수 정의
@@ -114,8 +115,8 @@ async def main():
             
             
             ## 불꽃 감지시에 감지시 부저 타임 15초 증가
-            if ((analog_data[1] < 1000) or (analog_data[2] < 1000)) and (buzzer_time_lock == 0):
-                buzzer_time += 15
+            if ((analog_data[1] < 200) or (analog_data[2] < 200)) and (buzzer_time_lock == 0):
+                buzzer_time += 10
                 buzzer_time_lock = 1
             
             ## 유해가스 감지시 부저 타임 10초 증가
@@ -124,7 +125,7 @@ async def main():
                 buzzer_time_lock = 1
                 
             ## 일산화탄소 감지시 부저 타임 10초 증가
-            if (analog_data[4] >= 200) and (buzzer_time_lock == 0):
+            if (analog_data[4] >= 50) and (buzzer_time_lock == 0):
                 buzzer_time += 10
                 buzzer_time_lock = 1
             
@@ -143,7 +144,7 @@ async def main():
                 buzzer_time_lock = 0
             
             btn_pressed=0
-            print('부저타임',buzzer_time)
+            print(f"부저타임:{buzzer_time}, Co 측정값 : {analog_data[5]}")
             
             
             
