@@ -30,7 +30,7 @@ const LcdLayout = () => {
     temperature: 0,
     humidity: 0,
     battery: 0,
-    fire_1: 0,
+    fire_1: 1200,
     fire_2: 1200,
     air: 0,
     co: 0,
@@ -48,7 +48,7 @@ const LcdLayout = () => {
     //데크 메세지 변수 정의
     const [deckMessages, setDeckMessages] = useState([]); 
 
-    // 공지사항 열기
+    // 숙지사항 열기
     const [checkAnnouncement, setCheckAnnouncement] = useState(false);
     
     // 위험 알림으로 화면 꽉 채우기
@@ -81,7 +81,7 @@ const LcdLayout = () => {
     useEffect(() => {
         const interval = setInterval(() => {
           getDeckMessages();
-        }, 5000); // 5초마다 새로운 메시지를 가져옴
+        }, 1000); // 5초마다 새로운 메시지를 가져옴
         return () => clearInterval(interval);
     }, []);
 
@@ -114,10 +114,10 @@ const LcdLayout = () => {
           }else if(response.data.sensorData[camp_manger][1].air > 200){
             // console.log('air에러',data.air);
             setCheckDangerDiv(true);
-          }else if(response.data.sensorData[camp_manger][1].fire_1 >240){
+          }else if(response.data.sensorData[camp_manger][1].fire_1 < 20){
             // console.log('fire1에러',data.fire_1);
             setCheckDangerDiv(true);
-          }else if(response.data.sensorData[camp_manger][1].fire_2 < 1000){
+          }else if(response.data.sensorData[camp_manger][1].fire_2 < 20){
             // console.log('fire2에러',data.fire_2);
             setCheckDangerDiv(true);
           }else{
@@ -163,12 +163,12 @@ const LcdLayout = () => {
   
       // 5초 간격으로 데이터 가져오는 함수 실행(창 안뜰 때 == 일정수치 안넘었을 때)
       
-          const interval = setInterval(() => fetchData(), 5000);
+          const interval = setInterval(() => fetchData(), 1000);
           return ()=>clearInterval(interval);
       
     }, [data])
 
-    // 공지사항 열기
+    // 숙지사항 열기
     const openAnnouncement = ()=>{
       setCheckAnnouncement(true);
     }
@@ -197,7 +197,7 @@ const LcdLayout = () => {
 
       {/* 뒤로가기 버튼 */}
       <button onClick={goBack} style={{position:'absolute', top:'10px', left:'10px', backgroundColor:'green'}}>뒤로가기</button>
-      {/* 공지사항 */}
+      {/* 숙지사항 */}
       {checkAnnouncement && 
       <div style={{backgroundColor:'white', opacity:'50%', position:'absolute', bottom:'0', right:'0'}}>
         <ul>
@@ -320,7 +320,7 @@ const LcdLayout = () => {
           : (null)
           }
           {!checkAnnouncement &&
-          <button onClick={openAnnouncement} style={{backgroundColor:'green', position:'fixed', bottom:'30px', right:'30px'}}>공지사항</button>
+          <button onClick={openAnnouncement} style={{backgroundColor:'green', position:'fixed', bottom:'30px', right:'30px'}}>숙지사항</button>
           }
     </div>
   )

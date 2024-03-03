@@ -65,7 +65,7 @@ let sensorData = {
       fire_1 : 1200,
       fire_2 : 1200,
       air : 146,
-      co : 40,
+      co : 15,
       btn : 0
     }
   }
@@ -75,7 +75,7 @@ setInterval(() => {
 
   receiveSensorData(sensorData)
   
-}, 5000);
+}, 1000);
 
 // =========================================================
 
@@ -108,7 +108,7 @@ io.on('connection', (socket) => {
           btn : data.Btn
       };
 
-    console.log(sensorData);
+    
     receiveSensorData(sensorData) // index.js에 있는 함수
     
     // module.exports = sensorData;

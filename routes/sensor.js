@@ -17,7 +17,7 @@ function receiveSensorData (data){
 
 // 클라이언트가 http://localhost:8000/sensor/data로 요청을 보냈을 때 작동하는 함수
 sensorRouter.get('/data', (req,res)=>{
-  console.log(req.body);
+  // console.log(req.body);
   res.json({sensorData:sensorData});
 })
 

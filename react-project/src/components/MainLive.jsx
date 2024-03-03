@@ -140,11 +140,11 @@ const MainLive = () => {
             mem_id: user.id,
             deck_id: response.data.sensorData[camp_manger][1].deck_num,
           });
-        }else if(response.data.sensorData[camp_manger][1].fire_1 < 900){
+        }else if(response.data.sensorData[camp_manger][1].fire_1 < 20){
           // console.log('fire1에러',data.fire_1);
           setShowFireAlert(true);
           setIsFetching(false);
-        }else if(response.data.sensorData[camp_manger][1].fire_2 < 900){
+        }else if(response.data.sensorData[camp_manger][1].fire_2 < 20){
           // console.log('fire2에러',data.fire_2);
           setShowFireAlert(true);
           setIsFetching(false);
@@ -208,7 +208,7 @@ const MainLive = () => {
 
     // 5초 간격으로 데이터 가져오는 함수 실행(창 안뜰 때 == 일정수치 안넘었을 때)
     if(isFetching){
-      const interval = setInterval(() => fetchData(), 5000);
+      const interval = setInterval(() => fetchData(), 1000);
       return ()=>clearInterval(interval);
     }
   }, [data, isFetching])
@@ -528,17 +528,6 @@ const MainLive = () => {
               <p>풍속 : {weather?.wind.speed}</p>
             </div>
           </div>
-          {/* <button onClick={handleShowForecast}>일기예보</button> */}
-          {modalShow ? null : (
-            <Button
-              variant="primary"
-              onClick={() => {
-                setModalShow(true);
-              }}
-            >
-              일기 예보
-            </Button>
-          )}
           </div>
           <br />
           <div style={{display:'flex'}}>
@@ -553,62 +542,7 @@ const MainLive = () => {
               <button onClick={goToLCDPage_6} style={{backgroundColor:'green', fontWeight:'bold', marginBottom:'10px'}}>Deck_6</button>
             </div>
           </div>
-          
-          
 
-          <Modal
-            show={modalShow}
-            size="lg"
-            aria-labelledby="contained-modal-title-vcenter"
-            centered
-          >
-            <Modal.Header>
-              <Modal.Title id="contained-modal-title-vcenter">
-                일기 예보
-              </Modal.Title>
-            </Modal.Header>
-            <Modal.Body className="table">
-              <table>
-                <tr>
-                  <th></th>
-                  <th>
-                    {month}/{date + 1}
-                  </th>
-                  <th>
-                    {month}/{date + 2}
-                  </th>
-                  <th>
-                    {month}/{date + 3}
-                  </th>
-                  <th>
-                    {month}/{date + 4}
-                  </th>
-                  <th>
-                    {month}/{date + 5}
-                  </th>
-                </tr>
-                <tr>
-                  <td>날씨</td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                </tr>
-                <tr>
-                  <td>기온</td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                </tr>
-              </table>
-            </Modal.Body>
-            <Modal.Footer>
-              <Button onClick={() => setModalShow(false)}>Close</Button>
-            </Modal.Footer>
-          </Modal>
         </div>
       </div>
 
