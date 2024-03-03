@@ -109,17 +109,31 @@ const LcdLayout = () => {
           if(response.data.sensorData[camp_manger][1].co > 50){
             // console.log('CO에러',data.co);
             setCheckDangerDiv(true);
+            const timer = setTimeout(()=>{
+              setCheckDangerDiv(false);
+            }, 5000);
+            return ()=> clearTimeout(timer);
           }else if(response.data.sensorData[camp_manger][1].air > 200){
             // console.log('air에러',data.air);
             setCheckDangerDiv(true);
-          }else if(response.data.sensorData[camp_manger][1].fire_1 < 20){
+            const timer = setTimeout(()=>{
+              setCheckDangerDiv(false);
+            }, 5000);
+            return ()=> clearTimeout(timer);
+          }else if(response.data.sensorData[camp_manger][1].fire_1 < 200){
             // console.log('fire1에러',data.fire_1);
             setCheckDangerDiv(true);
-          }else if(response.data.sensorData[camp_manger][1].fire_2 < 20){
+            const timer = setTimeout(()=>{
+              setCheckDangerDiv(false);
+            }, 5000);
+            return ()=> clearTimeout(timer);
+          }else if(response.data.sensorData[camp_manger][1].fire_2 < 200){
             // console.log('fire2에러',data.fire_2);
             setCheckDangerDiv(true);
-          }else{
-            setCheckDangerDiv(false);
+            const timer = setTimeout(()=>{
+              setCheckDangerDiv(false);
+            }, 5000);
+            return ()=> clearTimeout(timer);
           }
   
           //배터리 잔량에 따른 모양 설정

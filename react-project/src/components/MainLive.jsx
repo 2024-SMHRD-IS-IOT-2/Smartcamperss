@@ -133,14 +133,14 @@ const MainLive = () => {
             mem_id: user.id,
             deck_id: response.data.sensorData[camp_manger][1].deck_num,
           });
-        }else if(response.data.sensorData[camp_manger][1].fire_1 < 20){
+        }else if(response.data.sensorData[camp_manger][1].fire_1 < 200){
           // console.log('fire1에러',data.fire_1);
           setShowFireAlert(true);
           setIsFetching(false);
           axios.post("/sensor/fireWarning", {
             mem_id: user.id,
             deck_id: response.data.sensorData[camp_manger][1].deck_num,});
-        }else if(response.data.sensorData[camp_manger][1].fire_2 < 20){
+        }else if(response.data.sensorData[camp_manger][1].fire_2 < 200){
           // console.log('fire2에러',data.fire_2);
           setShowFireAlert(true);
           setIsFetching(false);
