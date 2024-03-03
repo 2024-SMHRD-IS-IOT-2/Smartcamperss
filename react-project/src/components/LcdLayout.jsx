@@ -104,8 +104,6 @@ const LcdLayout = () => {
             co: response.data.sensorData[camp_manger][1].co,
             btn: response.data.sensorData[camp_manger][1].btn
           });
-          // console.log('담은 값',data.co);
-          // console.log(user.id);
 
           // 위험상황 시, div태그 깜빡이기
           if(response.data.sensorData[camp_manger][1].co > 50){

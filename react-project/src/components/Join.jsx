@@ -92,8 +92,6 @@ const Join = () => {
                             <Form.Control type="password" placeholder="비밀번호 확인" ref={pw2Ref} />
                         </Form.Group>
 
-                        
-                        <span className="text-center" style={{ color: "white" }}>※ 비밀번호가 일치하지 않습니다.</span>
 
                         <Form.Group controlId="formBasicName">
                             <Form.Label> </Form.Label>

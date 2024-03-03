@@ -1,7 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import axios from "../axios";
-import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
 import "../App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { ClimateContext } from "../context/ClimateContext";
@@ -28,6 +26,7 @@ const MainLive = () => {
       co: 0,
       btn:0
     }); 
+
   // 데이터를 가져오는 동작을 멈출지 여부를 나타내는 상태 변수
   // true : 계속 가져옴 / false : 멈춤
   const [isFetching, setIsFetching] = useState(true);
@@ -49,11 +48,6 @@ const MainLive = () => {
   //현재 시간
   let today = new Date();
   // let year = today.getFullYear;
-  let month = today.getMonth() + 1; // 월
-  let date = today.getDate(); // 날짜
-
-  // 모달창 열고닫는 boolean
-  const [modalShow, setModalShow] = React.useState(false);
 
   // 오늘날씨 API
   const { weather, setWeather } = useContext(ClimateContext); // state에서 context로 바꿔서 App.js로 올림 => LCD에서도 쓰려고
@@ -96,7 +90,6 @@ const MainLive = () => {
   const [coRandoms, setCoRandom] = useState([0,0,0,0,0]);
   const [tempRandoms, setTempRandoms] = useState([0,0,0,0,0]);
   const [humRandoms, setHumRandoms] = useState([0,0,0,0,0]);
-  const [airRandoms, setAirRandoms] = useState([0,0,0,0,0]);
 
   
   
@@ -144,6 +137,9 @@ const MainLive = () => {
           // console.log('fire1에러',data.fire_1);
           setShowFireAlert(true);
           setIsFetching(false);
+          axios.post("/sensor/fireWarning", {
+            mem_id: user.id,
+            deck_id: response.data.sensorData[camp_manger][1].deck_num,});
         }else if(response.data.sensorData[camp_manger][1].fire_2 < 20){
           // console.log('fire2에러',data.fire_2);
           setShowFireAlert(true);
@@ -151,8 +147,7 @@ const MainLive = () => {
           axios.post("/sensor/fireWarning", {
             mem_id: user.id,
             deck_id: response.data.sensorData[camp_manger][1].deck_num,});
-        }else if(
-          response.data.sensorData[camp_manger][1].btn === 1){
+        }else if(response.data.sensorData[camp_manger][1].btn === 1){
           setShowBtnAlert(true);
           setIsFetching(false);
           // button DB저장
@@ -255,7 +250,6 @@ const MainLive = () => {
       setCoRandom(Array.from({length: 5}, () => Math.floor(Math.random() * 31) + 20))
       setTempRandoms(Array.from({length: 5}, () => Math.floor(Math.random() *6) + 20))
       setHumRandoms(Array.from({length: 5}, () => Math.floor(Math.random() * 50) + 1))
-      setAirRandoms(Array.from({length: 5}, () => Math.floor(Math.random() * 101) + 100))
    }, 5000);
 
    return ()=>{
@@ -281,7 +275,6 @@ const MainLive = () => {
     let weather_url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`;
 
     let response = await axios.get(weather_url);
-    // console.log('날씨!!!!!!!!!!!', response.data);
     setWeather(response.data);
     console.log('hihi')
   };
@@ -542,7 +535,6 @@ const MainLive = () => {
               <button onClick={goToLCDPage_6} style={{backgroundColor:'green', fontWeight:'bold', marginBottom:'10px'}}>Deck_6</button>
             </div>
           </div>
-
         </div>
       </div>
 

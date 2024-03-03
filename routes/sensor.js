@@ -71,9 +71,9 @@ sensorRouter.post('/fireWarning', (req,res)=>{
     const selectSql = 'select max(msg_idx) as max_idx from tb_flame_warning';
     conn.query(selectSql, (err, rows)=>{
       msg_idx = (rows[0].max_idx+1)
-      console.log('가장 큰 msg_idx:', msg_idx);
+      console.log('가장 큰 msg_idx+1:', msg_idx);
     })
-    const sql = "insert into tb_co_warning(msg_idx, mem_id, deck_id, alert_time) values (?, ?, ?, NOW()) on duplicate key update msg_idx=values(msg_idx)";
+    const sql = "insert into tb_flame_warning(msg_idx, mem_id, deck_id, alert_time) values (?, ?, ?, NOW()) on duplicate key update msg_idx=values(msg_idx)";
 
     conn.query(sql, [msg_idx, mem_id, deck_id], (err, rows) => {
       if (err) {
@@ -81,7 +81,7 @@ sensorRouter.post('/fireWarning', (req,res)=>{
         return;
       }else{
         console.log('데이터 삽입 완료');
-        console.log('삽입된 행 수:', result.affectedRows);
+        console.log('삽입된 행 수:', rows.affectedRows);
       }
     })
 })

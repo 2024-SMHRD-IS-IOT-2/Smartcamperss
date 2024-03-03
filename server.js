@@ -62,7 +62,7 @@ let sensorData = {
       temperature : 22,
       humidity : 32,
       battery : 498,
-      fire_1 : 1200,
+      fire_1 : 1,
       fire_2 : 1200,
       air : 146,
       co : 15,
