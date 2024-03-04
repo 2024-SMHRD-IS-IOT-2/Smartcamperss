@@ -21,7 +21,14 @@
 - 다양한 IoT 센서를 활용하여 캠핑 이용객들에게 안전 관리 서비스를 제공함.
 
 # 3. 개발환경
-  <img src="https://img.shields.io/badge/리액트-61DAFB?style=flat&logo=React&logoColor=white"/>
+  
+![이미지 링크](https://img.shields.io/badge/React-61DAFB?style=flat&logo=React&logoColor=white) 
+![이미지 링크](https://img.shields.io/badge/Node.js-339933?style=flat&logo=Node.js&logoColor=white) 
+![이미지 링크](https://img.shields.io/badge/raspberrypi-A22846?style=flat&logo=raspberrypi&logoColor=white) 
+![이미지 링크](https://img.shields.io/badge/raspberrypi-A22846?style=flat&logo=raspberrypi&logoColor=white) 
+
+
+
 
 # 4. 유스케이스
 
