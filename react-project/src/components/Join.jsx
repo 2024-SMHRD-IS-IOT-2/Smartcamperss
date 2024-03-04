@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 import axios from '../axios';
-import { useNavigate } from 'react-router-dom';
 import Footer from './Footer';
 
 const Join = () => {
@@ -14,7 +13,6 @@ const Join = () => {
     const campnameRef = useRef();
     const campaddRef = useRef();
     const camptelRef = useRef();
-    const navigate = useNavigate();
     const [userData, setUserData] = useState({});
     const [text, setText] = useState('');
     const [passwordMatch, setPasswordMatch] = useState(true);
@@ -60,6 +58,8 @@ const Join = () => {
                     window.alert('SavetheCampers 가입을 축하합니다😄😁');
                     window.location.href = '/';
                 });
+            }else{
+                setPasswordMatch(false);
             }
         }
     }, [userData, passwordMatch]);
@@ -91,6 +91,8 @@ const Join = () => {
                             <Form.Label> </Form.Label>
                             <Form.Control type="password" placeholder="비밀번호 확인" ref={pw2Ref} />
                         </Form.Group>
+                        
+                        {!passwordMatch && <p style={{color:'red'}}>비밀번호가 일치하지 않습니다.</p>}
 
 
                         <Form.Group controlId="formBasicName">

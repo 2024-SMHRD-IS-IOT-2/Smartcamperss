@@ -1,6 +1,5 @@
 import React, { useRef, useState } from 'react';
 import axios from 'axios';
-import Footer from './Footer';
 import { Button } from "react-bootstrap";
 import Header from './Header';
 

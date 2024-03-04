@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "../axios";
 import "../App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -30,11 +30,14 @@ const MainLive = () => {
   // 데이터를 가져오는 동작을 멈출지 여부를 나타내는 상태 변수
   // true : 계속 가져옴 / false : 멈춤
   const [isFetching, setIsFetching] = useState(true);
+  
   // 경고창을 표시할지 여부를 나타내는 상태 변수
   // true : 경고창 뜸 / false : 경고창 안뜸 
   const [showAlert, setShowAlert] = useState(false); 
+
   // 버튼꺼 경고창 (따로)
   const [showBtnAlert, setShowBtnAlert] = useState(false);
+
   // 화재감지 경고창 (따로)
   const [showFireAlert, setShowFireAlert] = useState(false);
 
