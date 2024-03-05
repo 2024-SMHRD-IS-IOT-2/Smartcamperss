@@ -47,15 +47,12 @@
 
 # 10. 참고문헌
 [참고사이트]
-한국관광공사  고캠핑 
-https://gocamping.or.kr/
-
-한국관광데이터랩
-https://datalab.visitkorea.or.kr/
+- 한국관광공사  고캠핑 (https://gocamping.or.kr/)
+- 한국관광데이터랩 (https://datalab.visitkorea.or.kr/)
 
 [보고서]
-2022년 기준 캠핑 이용자 실태조사 결과 보고서
-한국관광공사· 문화체육관광부, 2023.12.
+- 2022년 기준 캠핑 이용자 실태조사 결과 보고서
+-         한국관광공사· 문화체육관광부, 2023.12.
 
 [보도자료] 코로나 이후에도 캠핑 인기 꾸준
 - ‘2021 캠핑이용자 실태조사’ 결과 발표 -, 2022년 09월 06일 
@@ -80,11 +77,5 @@ YTN, 2023.11.12
 이번엔 야영 텐트서 일산화탄소 중독 추정 사망
 동아일보 2019.01.15. A12
 
-부탄가스 온수매트 켜고 자다가‐
-해수욕장 텐트서 60대 부부 숨져
+부탄가스 온수매트 켜고 자다가‐해수욕장 텐트서 60대 부부 숨져
 조선일보 2021.04.28. A10
-
-![image](https://github.com/2024-SMHRD-IS-IOT-2/Smartcamperss/assets/74088300/414724eb-3cdf-4ccc-a6a4-3fb8aceedd3f)
-
-
-![image](https://github.com/2024-SMHRD-IS-IOT-2/Smartcamperss/assets/74088300/636dd877-1e3c-49aa-9dbd-536b8469b598)
