@@ -73,3 +73,6 @@
 ###### 캠핑카에서… 텐트서… 난방용 가스 새 잇단 참변, 동아일보 2020.12.15. A14
 ###### 이번엔 야영 텐트서 일산화탄소 중독 추정 사망, 동아일보 2019.01.15. A12
 ###### 부탄가스 온수매트 켜고 자다가‐해수욕장 텐트서 60대 부부 숨져, 조선일보 2021.04.28. A10
+
+
+![Anurag's GitHub stats](https://github-readme-stats.vercel.app/api?username=2024-SMHRD-IS-IOT-2/Smartcamperss&hide=contribs,prs)
